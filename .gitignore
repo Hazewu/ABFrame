@@ -4,3 +4,6 @@ UserSettings
 obj
 Temp
 .vs
+ProjectSettings/ProjectVersion.txt
+Packages/packages-lock.json
+Packages/manifest.json
