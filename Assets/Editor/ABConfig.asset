@@ -19,3 +19,5 @@ MonoBehaviour:
     Path: Assets/GameResources/UI
   - ABName: sound
     Path: Assets/GameResources/Audioclips
+  - ABName: assetbundleconfig
+    Path: Assets/GameData/ABData

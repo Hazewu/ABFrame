@@ -193,7 +193,11 @@ public class BundleEditor
     {
         for (int i = 0; i < strs.Length; i++)
         {
-            if (name == strs[i])
+            string abName = strs[i];
+
+            if (name == abName ||
+                // 包含，并且去掉后，第一个值是.，则能充分表明name是属于abName的正主、.meta、.manifest、.manifest.meta文件
+                (name.Contains(abName) && name.Replace(abName, "")[0] == '.'))
             {
                 return true;
             }
@@ -209,7 +213,7 @@ public class BundleEditor
         for (int i = 0; i < files.Length; i++)
         {
             // TODO，这里不够充分
-            if (ContainABName(files[i].Name, allBundleNames) || files[i].Name.EndsWith(".meta"))
+            if (ContainABName(files[i].Name, allBundleNames))
             {
                 continue;
             }
@@ -274,7 +278,7 @@ public class BundleEditor
             // 二进制中不需要实际的路径，用crc就行了
             ab.Path = "";
         }
-        string bytePath = m_BundleTargetPath + "/AssetBundleConfig.bytes";
+        string bytePath = Application.dataPath + "/GameData/ABData/AssetBundleConfig.bytes";
         if (File.Exists(bytePath)) File.Delete(bytePath);
         FileStream binaryFs = new FileStream(bytePath, FileMode.Create, FileAccess.ReadWrite);
         BinaryFormatter bf = new BinaryFormatter();
