@@ -60,8 +60,13 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/2022.3.34f1c1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets/Scripts/Frame/ClassObjectPool.cs" />
     <Compile Include="Assets/Scripts/CRC32.cs" />
+    <Compile Include="Assets/Scripts/Frame/AssetBundleManager.cs" />
+    <Compile Include="Assets/Scripts/Frame/ResourceManager.cs" />
+    <Compile Include="Assets/Scripts/Frame/Singleton.cs" />
     <Compile Include="Assets/Scripts/TestGameStart.cs" />
+    <Compile Include="Assets/Scripts/Frame/ObjectManager.cs" />
     <Compile Include="Assets/Scripts/AssetBundleConfig.cs" />
   </ItemGroup>
   <ItemGroup>
