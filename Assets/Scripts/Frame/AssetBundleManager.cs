@@ -51,7 +51,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
             else
             {
                 m_ResourceItemDic.Add(item.m_Crc, item);
-                Debug.Log("资源名：" + item.m_AssetName + " ab包名：" + item.m_ABName);
+                Debug.Log("资源名：" + item.m_AssetName + " ab包名：" + item.m_ABName + "  crc:" + item.m_Crc);
             }
         }
 
@@ -128,7 +128,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
     public ResourceItem LoadResourceAssetBundle(uint crc)
     {
         ResourceItem item = null;
-        if (m_ResourceItemDic.TryGetValue(crc, out item) || item == null)
+        if (!m_ResourceItemDic.TryGetValue(crc, out item) || item == null)
         {
             Debug.LogError(string.Format("LoadResourceAssetBundle error: can not find crc {0} in AssetBundleConfig", crc.ToString()));
             return item;
@@ -197,6 +197,30 @@ public class ResourceItem
     public List<string> m_ABDepends = null;
     // 该资源加载完的AB包
     public AssetBundle m_AssetBundle = null;
+
+    //--------------------------------------
+    // 资源对象
+    public Object m_Obj = null;
+    // 资源唯一标识
+    public int m_Guid = 0;
+    // 资源最后使用的时间
+    public float m_LastUseTime = 0.0f;
+    // 引用计数
+    private int m_RefCount = 0;
+
+    public int RefCount
+    {
+        get { return m_RefCount; }
+        set
+        {
+            m_RefCount = value;
+
+            if (m_RefCount < 0)
+            {
+                Debug.LogError("RefCount < 0" + m_RefCount + " ," + (m_Obj != null ? m_Obj.name : " name is null"));
+            }
+        }
+    }
 }
 
 /// <summary>
