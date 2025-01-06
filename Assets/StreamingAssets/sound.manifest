@@ -1,0 +1,32 @@
+ManifestFileVersion: 0
+CRC: 3197444294
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 10a7df843221ffd40bd8fcf39246077b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 10a7df843221ffd40bd8fcf39246077b
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/GameResources/Audioclips/RecoverHPSound.mp3
+- Assets/GameResources/Audioclips/Footstep-low.wav
+- Assets/GameResources/Audioclips/LunaDie.mp3
+- Assets/GameResources/Audioclips/AttackSound.mp3
+- Assets/GameResources/Audioclips/Normal.mp3
+- Assets/GameResources/Audioclips/MonsterAttack.wav
+- Assets/GameResources/Audioclips/MonsterHit.wav
+- Assets/GameResources/Audioclips/LunaAttack.mp3
+- Assets/GameResources/Audioclips/Dog.mp3
+- Assets/GameResources/Audioclips/LunaHit.mp3
+- Assets/GameResources/Audioclips/SkillSound.mp3
+- Assets/GameResources/Audioclips/Battle.mp3
+- Assets/GameResources/Audioclips/FinishTask.mp3
+Dependencies: []

@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+CRC: 3637846860
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 647d4a687209c2da825bb0eed4da3300
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 647d4a687209c2da825bb0eed4da3300
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/GameResources/UI/RecoverHP.png
+- Assets/GameResources/UI/AttackIcon.png
+- Assets/GameResources/UI/Grid.png
+- Assets/GameResources/UI/ColorCard.png
+- Assets/GameResources/UI/HPMask.png
+- Assets/GameResources/UI/TalkBG.png
+- Assets/GameResources/UI/Escape.png
+- Assets/GameResources/UI/Head.png
+- Assets/GameResources/UI/_DF_TitleScreen.png
+- Assets/GameResources/UI/HeadGrid.png
+- Assets/GameResources/UI/Defend.png
+- Assets/GameResources/UI/HPBar.png
+- Assets/GameResources/UI/Skill.png
+- Assets/GameResources/UI/JoyStick.png
+Dependencies: []

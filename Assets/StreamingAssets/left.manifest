@@ -1,0 +1,41 @@
+ManifestFileVersion: 0
+CRC: 1562040256
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 11aae0af8cc01a1d488e6af57e2d56dc
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b2cd636646762a7ae57ab7a268c4da95
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 11aae0af8cc01a1d488e6af57e2d56dc
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/GameResources/Prefabs/Left.prefab
+Dependencies:
+- /Users/hazewu/Public/unityWorkspace/ABFrame/Assets/StreamingAssets/ui
