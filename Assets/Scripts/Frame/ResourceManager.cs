@@ -1,12 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEditor;
-using System.Threading;
-using System.IO;
-using UnityEditor.PackageManager.Requests;
-using Unity.VisualScripting.Antlr3.Runtime;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
