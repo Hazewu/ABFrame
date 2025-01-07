@@ -6,6 +6,7 @@ using UnityEditor;
 using System.Threading;
 using System.IO;
 using UnityEditor.PackageManager.Requests;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
@@ -166,16 +167,16 @@ public class ResourceManager : Singleton<ResourceManager>
     {
         if (item == null || item.RefCount > 0) return;
 
-        // 一定执行
-        if (!AssetDic.Remove(item.m_Crc))
-        {
-            return;
-        }
-
         if (!destroyCache)
         {
             // 不销毁，移动到头部，当要清理缓存时，进行清理
             m_NoReferenceAssetMapList.InsertToHead(item);
+            return;
+        }
+
+        // 一定执行
+        if (!AssetDic.Remove(item.m_Crc))
+        {
             return;
         }
 
@@ -213,8 +214,31 @@ public class ResourceManager : Singleton<ResourceManager>
         }
         if (item == null)
         {
-            Debug.LogError("AssetDic里不存在改资源:" + obj.name + " 可能释放了多次");
+            Debug.LogError("AssetDic里不存在该资源:" + obj.name + " 可能释放了多次");
             return false;
+        }
+
+        item.RefCount--;
+
+        DestroyResourceItem(item, destroyObj);
+        return true;
+    }
+
+    /// <summary>
+    /// 对外提供资源的回收
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="destroyObj"></param>
+    /// <returns></returns>
+    public bool ReleaseResource(string path, bool destroyObj = false)
+    {
+        if (string.IsNullOrEmpty(path)) return false;
+
+        uint crc = CRC32.GetCRC32(path);
+        ResourceItem item = null;
+        if (!AssetDic.TryGetValue(crc, out item) || item == null)
+        {
+            Debug.LogError("AssetDic里不存在该资源:" + path + " 可能释放了多次");
         }
 
         item.RefCount--;
@@ -375,15 +399,78 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     /// <summary>
+    /// 预加载
+    /// </summary>
+    /// <param name="path"></param>
+    public void PreloadRes(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return;
+
+        uint crc = CRC32.GetCRC32(path);
+        ResourceItem item = GetCacheResourceItem(crc, 0);
+        if (item != null) return;
+
+        // 未加载，需要进行加载
+        Object obj = null;
+
+#if UNITY_EDITOR
+        if (!m_LoadFromAssetBundle)
+        {
+            item = AssetBundleManager.Instance.FindResourceItem(crc);
+            if (item.m_Obj != null)
+            {
+                obj = item.m_Obj;
+            }
+            else
+            {
+                obj = LoadAssetByEditor<Object>(path);
+            }
+        }
+#endif
+
+        if (obj == null)
+        {
+            item = AssetBundleManager.Instance.LoadResourceAssetBundle(crc);
+            if (item != null && item.m_AssetBundle != null)
+            {
+                if (item.m_Obj != null)
+                {
+                    obj = item.m_Obj;
+                }
+                else
+                {
+                    obj = item.m_AssetBundle.LoadAsset<Object>(item.m_AssetName);
+                }
+            }
+        }
+
+        CacheResource(path, ref item, crc, obj);
+
+        // 预加载资源在跳场景时不清空缓存
+        item.m_Clear = false;
+        ReleaseResource(obj, false);
+    }
+
+    /// <summary>
     /// 清空缓存，跳场景时调用
     /// </summary>
     public void ClearCache()
     {
-        while (m_NoReferenceAssetMapList.Size() > 0)
+        List<ResourceItem> tempList = new List<ResourceItem>();
+
+        foreach (ResourceItem item in AssetDic.Values)
         {
-            ResourceItem item = m_NoReferenceAssetMapList.Pop();
+            if (item.m_Clear)
+            {
+                tempList.Add(item);
+            }
+        }
+
+        foreach (ResourceItem item in tempList)
+        {
             DestroyResourceItem(item, true);
         }
+        tempList.Clear();
     }
 }
 
