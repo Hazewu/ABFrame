@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Unity.VisualScripting;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
@@ -94,7 +95,6 @@ public class ResourceManager : Singleton<ResourceManager>
         //    m_NoReferenceAssetMapList.Pop();
         //}
     }
-
 
 #if UNITY_EDITOR
     private T LoadAssetByEditor<T>(string path) where T : Object
@@ -466,6 +466,148 @@ public class ResourceManager : Singleton<ResourceManager>
             DestroyResourceItem(item, true);
         }
         tempList.Clear();
+    }
+
+    /// <summary>
+    /// 提供给ObjectManager的方法
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="resObj"></param>
+    /// <returns></returns>
+    public ResourceObj LoadResourceObj(string path, ResourceObj resObj)
+    {
+        if (resObj == null) return null;
+
+        uint crc = resObj.m_Crc == 0 ? CRC32.GetCRC32(path) : resObj.m_Crc;
+
+        ResourceItem item = GetCacheResourceItem(crc);
+        if (item != null)
+        {
+            resObj.m_ResItem = item;
+            return resObj;
+        }
+
+        Object obj = null;
+
+#if UNITY_EDITOR
+        if (!m_LoadFromAssetBundle)
+        {
+            item = AssetBundleManager.Instance.FindResourceItem(crc);
+            if (item.m_Obj != null)
+            {
+                obj = item.m_Obj;
+            }
+            else
+            {
+                obj = LoadAssetByEditor<Object>(path);
+            }
+        }
+#endif
+
+        if (obj == null)
+        {
+            item = AssetBundleManager.Instance.LoadResourceAssetBundle(crc);
+            if (item != null && item.m_AssetBundle != null)
+            {
+                if (item.m_Obj != null)
+                {
+                    obj = item.m_Obj;
+                }
+                else
+                {
+                    obj = item.m_AssetBundle.LoadAsset<Object>(item.m_AssetName);
+                }
+            }
+        }
+
+        CacheResource(path, ref item, crc, obj);
+        resObj.m_ResItem = item;
+        item.m_Clear = resObj.m_Clear;
+
+        return resObj;
+    }
+
+    /// <summary>
+    /// 根据releaseObj卸载资源
+    /// </summary>
+    /// <param name="resObj"></param>
+    /// <param name="destroyObj"></param>
+    /// <returns></returns>
+    public bool ReleaseResourceObj(ResourceObj resObj, bool destroyObj = false)
+    {
+        if (resObj == null) return false;
+
+        ResourceItem item = null;
+        if (!AssetDic.TryGetValue(resObj.m_Crc, out item) || item == null)
+        {
+            Debug.LogError("AssetDic里不存在该资源:" + resObj.m_CloneObj.name + " 可能释放了多次");
+            return false;
+        }
+
+        item.RefCount--;
+
+        DestroyResourceItem(item, destroyObj);
+        return true;
+    }
+
+    /// <summary>
+    /// 根据ResObj增加引用计数
+    /// </summary>
+    /// <param name="resObj"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
+    public int IncreaseResourceObjRef(ResourceObj resObj, int count = 1)
+    {
+        return resObj != null ? IncreaseResourceObjRef(resObj.m_Crc, count) : 0;
+    }
+
+    /// <summary>
+    /// 根据path的crc增加引用计数，TODO，需要吗？在GetCacheResourceItem和CacheResource中已经加过了，但是还有其他特殊情况
+    /// </summary>
+    /// <param name="crc"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
+    public int IncreaseResourceObjRef(uint crc = 0, int count = 1)
+    {
+        ResourceItem item = null;
+        if (!AssetDic.TryGetValue(crc, out item) || item == null)
+        {
+            return 0;
+        }
+
+        item.RefCount += count;
+        item.m_LastUseTime = Time.realtimeSinceStartup;
+        return item.RefCount;
+    }
+
+    /// <summary>
+    /// 根据ResObj减少引用计数
+    /// </summary>
+    /// <param name="resObj"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
+    public int DecreaseResourceObjRef(ResourceObj resObj, int count = 1)
+    {
+        return resObj != null ? DecreaseResourceObjRef(resObj.m_Crc, count) : 0;
+    }
+
+    /// <summary>
+    /// 根据路径的crc减少引用计数
+    /// </summary>
+    /// <param name="crc"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
+    public int DecreaseResourceObjRef(uint crc, int count = 1)
+    {
+        ResourceItem item = null;
+        if (!AssetDic.TryGetValue(crc, out item) || item == null)
+        {
+            return 0;
+        }
+
+        item.RefCount -= count;
+        item.m_LastUseTime = Time.realtimeSinceStartup;
+        return item.RefCount;
     }
 }
 
@@ -841,5 +983,30 @@ public class AsyncCallBack
         m_Param1 = null;
         m_Param2 = null;
         m_Param3 = null;
+    }
+}
+
+public class ResourceObj
+{
+    // 路径对应的CRC
+    public uint m_Crc = 0;
+    // 存ResourceItem，用于实例化
+    public ResourceItem m_ResItem = null;
+    // 实例化出来的GameObject
+    public GameObject m_CloneObj = null;
+    // 是否跳场景清除
+    public bool m_Clear = true;
+    // 实例化出来的GameObject的GUID
+    public long m_Guid = 0;
+    // 是否已经放回对象池
+    public bool m_Already = false;
+
+    public void Reset()
+    {
+        m_Crc = 0;
+        m_ResItem = null;
+        m_CloneObj = null;
+        m_Clear = true;
+        m_Guid = 0;
     }
 }
