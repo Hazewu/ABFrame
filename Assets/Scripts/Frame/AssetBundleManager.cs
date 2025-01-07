@@ -51,7 +51,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
             else
             {
                 m_ResourceItemDic.Add(item.m_Crc, item);
-                Debug.Log("资源名：" + item.m_AssetName + " ab包名：" + item.m_ABName + "  crc:" + item.m_Crc);
+                //Debug.Log("资源名：" + item.m_AssetName + " ab包名：" + item.m_ABName + "  crc:" + item.m_Crc);
             }
         }
 
@@ -205,6 +205,8 @@ public class ResourceItem
     public int m_Guid = 0;
     // 资源最后使用的时间
     public float m_LastUseTime = 0.0f;
+    // 是否跳场景清掉
+    public bool m_Clear = true;
     // 引用计数
     private int m_RefCount = 0;
 
