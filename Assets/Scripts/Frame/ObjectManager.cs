@@ -199,4 +199,90 @@ public class ObjectManager : Singleton<ObjectManager>
             }
         }
     }
+
+    /// <summary>
+    /// 异步实例化对象
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="setSceneObject"></param>
+    /// <param name="bClear"></param>
+    /// <param name="dealFinish"></param>
+    /// <param name="priority"></param>
+    /// <param name="param1"></param>
+    /// <param name="param2"></param>
+    /// <param name="param3"></param>
+    public void InstantiateObjectAsync(string path, bool setSceneObject, bool bClear,
+        OnAsyncObjFinish dealFinish, LoadResPriority priority, object param1 = null, object param2 = null, object param3 = null)
+    {
+        if (string.IsNullOrEmpty(path)) return;
+
+        uint crc = CRC32.GetCRC32(path);
+
+        ResourceObj resObj = GetObjectFromPool(crc);
+        if (resObj != null)
+        {
+            if (setSceneObject)
+            {
+                resObj.m_CloneObj.transform.SetParent(m_SceneTrs, false);
+            }
+
+            if (dealFinish != null)
+            {
+                dealFinish(path, resObj.m_CloneObj, param1, param2, param3);
+            }
+
+            return;
+        }
+
+        resObj = m_ResourceObjPool.Spawn(true);
+        resObj.m_Crc = crc;
+        resObj.m_SetSceneParent = setSceneObject;
+        resObj.m_Clear = bClear;
+        resObj.m_DealFinish = dealFinish;
+        resObj.m_param1 = param1;
+        resObj.m_param2 = param2;
+        resObj.m_param3 = param3;
+        // 调用ResourceManager的异步加载接口
+        ResourceManager.Instance.AsyncLoadResourceObj(path, resObj, OnLoadResourceObjFinish, priority);
+    }
+
+    /// <summary>
+    /// 加载完成回调执行，比资源的异步加载多套了一层回调
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="resObj"></param>
+    /// <param name="param1"></param>
+    /// <param name="param2"></param>
+    /// <param name="param3"></param>
+    private void OnLoadResourceObjFinish(string path, ResourceObj resObj)
+    {
+        if (resObj == null) return;
+
+        if (resObj.m_ResItem.m_Obj == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("异步资源加载的资源为空:" + path);
+#endif
+        }
+        else
+        {
+            resObj.m_CloneObj = GameObject.Instantiate(resObj.m_ResItem.m_Obj) as GameObject;
+        }
+
+        if (resObj.m_CloneObj != null && resObj.m_SetSceneParent)
+        {
+            resObj.m_CloneObj.transform.SetParent(m_SceneTrs, false);
+        }
+
+        if (resObj.m_DealFinish != null)
+        {
+            int tempGuid = resObj.m_CloneObj.GetInstanceID();
+            if (!m_ResourceObjDic.ContainsKey(tempGuid))
+            {
+                m_ResourceObjDic.Add(tempGuid, resObj);
+            }
+
+            resObj.m_DealFinish(path, resObj.m_CloneObj, resObj.m_param1, resObj.m_param2, resObj.m_param3);
+        }
+    }
 }
