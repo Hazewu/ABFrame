@@ -338,4 +338,63 @@ public class ObjectManager : Singleton<ObjectManager>
             // TODO 还有其他地方又resObj的引用吧，没去除干净
         }
     }
+
+    /// <summary>
+    /// 是否正在异步加载
+    /// </summary>
+    /// <param name="guid"></param>
+    /// <returns></returns>
+    public bool IsAsyncLoading(long guid)
+    {
+        return m_AsyncResObjDic[guid] != null;
+    }
+
+    /// <summary>
+    /// 该对象是否是对象池创建的
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public bool IsObjectManagerCreate(GameObject obj)
+    {
+        ResourceObj resObj = m_ResourceObjDic[obj.GetInstanceID()];
+        return resObj == null ? false : true;
+    }
+
+    /// <summary>
+    /// 清空对象池
+    /// </summary>
+    public void ClearCache()
+    {
+        List<uint> tempList = new List<uint>();
+        // TODO，忘记m_ObjectPoolDic这个是存什么了的，需要再看看
+        foreach (uint key in m_ObjectPoolDic.Keys)
+        {
+            List<ResourceObj> st = m_ObjectPoolDic[key];
+            for (int i = st.Count - 1; i >= 0; i--)
+            {
+                ResourceObj resObj = st[i];
+                if (!System.Object.ReferenceEquals(resObj.m_CloneObj, null) && resObj.m_Clear)
+                {
+                    m_ResourceObjDic.Remove(resObj.m_CloneObj.GetInstanceID());
+                    GameObject.Destroy(resObj.m_CloneObj);
+                    resObj.Reset();
+                    m_ResourceObjPool.Recycle(resObj);
+                }
+            }
+            if (st.Count <= 0)
+            {
+                tempList.Add(key);
+            }
+        }
+
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            uint temp = tempList[i];
+            if (m_ObjectPoolDic.ContainsKey(temp))
+            {
+                m_ObjectPoolDic.Remove(temp);
+            }
+        }
+        tempList.Clear();
+    }
 }
