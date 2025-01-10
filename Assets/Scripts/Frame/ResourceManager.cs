@@ -5,6 +5,8 @@ using UnityEditor;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
+    // 辅助取消异步加载的唯一id
+    private long m_Guid = 0;
     // 是否从AB包中加载资源
     private bool m_LoadFromAssetBundle = false;
     // 缓存引用计数为零的资源列表，游戏资源能快速加载，达到缓存最大的时候释放这个列表里面最早没用的资源
@@ -77,6 +79,15 @@ public class ResourceManager : Singleton<ResourceManager>
         {
             AssetDic.Add(item.m_Crc, item);
         }
+    }
+
+    /// <summary>
+    /// 创建唯一的GUID
+    /// </summary>
+    /// <returns></returns>
+    public long CreateGuid()
+    {
+        return m_Guid++;
     }
 
     /// <summary>
@@ -661,6 +672,42 @@ public class ResourceManager : Singleton<ResourceManager>
         callBack.m_ResObj = resObj;
         param.m_CallBackList.Add(callBack);
     }
+
+    /// <summary>
+    /// 取消回调
+    /// </summary>
+    /// <param name="resObj"></param>
+    /// <returns></returns>
+    public bool CancelLoad(ResourceObj resObj)
+    {
+        AsyncLoadResParam param = null;
+        // 要在队列没加载前才能取消，只有所有回调都没了，才取消成功
+        if (m_LoadingAssetDic.TryGetValue(resObj.m_Crc, out param) && m_LoadingAssetList[(int)param.m_Priority].Contains(param))
+        {
+            // 移除回调
+            for (int i = param.m_CallBackList.Count - 1; i >= 0; i--)
+            {
+                AsyncCallBack temp = param.m_CallBackList[i];
+                if (temp != null && resObj == temp.m_ResObj)
+                {
+                    temp.Reset();
+                    m_AsyncCallBackPool.Recycle(temp);
+                    param.m_CallBackList.Remove(temp);
+                }
+            }
+
+            // 从队列中移除等待中的异步加载数据
+            if (param.m_CallBackList.Count <= 0)
+            {
+                param.Reset();
+                m_LoadingAssetList[(int)param.m_Priority].Remove(param);
+                m_AsyncLoadResParamPool.Recycle(param);
+                m_LoadingAssetDic.Remove(resObj.m_Crc);
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 /// <summary>
@@ -1063,7 +1110,7 @@ public class ResourceObj
     public GameObject m_CloneObj = null;
     // 是否跳场景清除
     public bool m_Clear = true;
-    // 实例化出来的GameObject的GUID
+    // 存储GUID，注意注意，这里不是obj的instanceId
     public long m_Guid = 0;
     // 是否已经放回对象池
     public bool m_Already = false;

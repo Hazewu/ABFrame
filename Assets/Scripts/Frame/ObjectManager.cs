@@ -15,6 +15,8 @@ public class ObjectManager : Singleton<ObjectManager>
     private ClassObjectPool<ResourceObj> m_ResourceObjPool = null;
     // 暂存ResObj的Dic，把实例化的资源存起来，key=guid
     private Dictionary<int, ResourceObj> m_ResourceObjDic = new Dictionary<int, ResourceObj>();
+    // 根据异步的guid存储ResourceObj，来判断是否正在异步加载
+    private Dictionary<long, ResourceObj> m_AsyncResObjDic = new Dictionary<long, ResourceObj>();
 
     public void Init(Transform recycleTrs, Transform sceneTrs)
     {
@@ -211,10 +213,10 @@ public class ObjectManager : Singleton<ObjectManager>
     /// <param name="param1"></param>
     /// <param name="param2"></param>
     /// <param name="param3"></param>
-    public void InstantiateObjectAsync(string path, bool setSceneObject, bool bClear,
+    public long InstantiateObjectAsync(string path, bool setSceneObject, bool bClear,
         OnAsyncObjFinish dealFinish, LoadResPriority priority, object param1 = null, object param2 = null, object param3 = null)
     {
-        if (string.IsNullOrEmpty(path)) return;
+        if (string.IsNullOrEmpty(path)) return 0;
 
         uint crc = CRC32.GetCRC32(path);
 
@@ -231,9 +233,10 @@ public class ObjectManager : Singleton<ObjectManager>
                 dealFinish(path, resObj.m_CloneObj, param1, param2, param3);
             }
 
-            return;
+            return resObj.m_Guid;
         }
 
+        long guid = ResourceManager.Instance.CreateGuid();
         resObj = m_ResourceObjPool.Spawn(true);
         resObj.m_Crc = crc;
         resObj.m_SetSceneParent = setSceneObject;
@@ -242,8 +245,10 @@ public class ObjectManager : Singleton<ObjectManager>
         resObj.m_param1 = param1;
         resObj.m_param2 = param2;
         resObj.m_param3 = param3;
+        resObj.m_Guid = guid;
         // 调用ResourceManager的异步加载接口
         ResourceManager.Instance.AsyncLoadResourceObj(path, resObj, OnLoadResourceObjFinish, priority);
+        return guid;
     }
 
     /// <summary>
@@ -267,6 +272,12 @@ public class ObjectManager : Singleton<ObjectManager>
         else
         {
             resObj.m_CloneObj = GameObject.Instantiate(resObj.m_ResItem.m_Obj) as GameObject;
+        }
+
+        // 加载完成就从正在加载的异步中移除
+        if (m_AsyncResObjDic.ContainsKey(resObj.m_Guid))
+        {
+            m_AsyncResObjDic.Remove(resObj.m_Guid);
         }
 
         if (resObj.m_CloneObj != null && resObj.m_SetSceneParent)
@@ -310,5 +321,21 @@ public class ObjectManager : Singleton<ObjectManager>
         }
 
         tempList.Clear();
+    }
+
+    /// <summary>
+    /// 取消异步加载
+    /// </summary>
+    /// <param name="guid"></param>
+    public void CancelLoad(long guid)
+    {
+        ResourceObj resObj = null;
+        if (m_AsyncResObjDic.TryGetValue(guid, out resObj) && ResourceManager.Instance.CancelLoad(resObj))
+        {
+            m_AsyncResObjDic.Remove(guid);
+            resObj.Reset();
+            m_ResourceObjPool.Recycle(resObj);
+            // TODO 还有其他地方又resObj的引用吧，没去除干净
+        }
     }
 }
