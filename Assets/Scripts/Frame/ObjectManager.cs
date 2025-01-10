@@ -285,4 +285,30 @@ public class ObjectManager : Singleton<ObjectManager>
             resObj.m_DealFinish(path, resObj.m_CloneObj, resObj.m_param1, resObj.m_param2, resObj.m_param3);
         }
     }
+
+    /// <summary>
+    /// 预加载GameObject
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="count"></param>
+    /// <param name="clear"></param>
+    public void PreloadGameObject(string path, int count = 1, bool clear = false)
+    {
+        List<GameObject> tempList = new List<GameObject>();
+        for (int i = 0; i < count; i++)
+        {
+            GameObject go = InstantiateObject(path, false, clear);
+            tempList.Add(go);
+        }
+
+        // 需要加载完后再释放，否则可能加载的是同一个对象（因为缓存了）
+        for (int i = 0; i < count; i++)
+        {
+            GameObject obj = tempList[i];
+            ReleaseObject(obj);
+            obj = null;
+        }
+
+        tempList.Clear();
+    }
 }
