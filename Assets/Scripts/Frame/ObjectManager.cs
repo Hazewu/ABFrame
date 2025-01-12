@@ -61,6 +61,12 @@ public class ObjectManager : Singleton<ObjectManager>
             GameObject obj = resObj.m_CloneObj;
             if (!System.Object.ReferenceEquals(obj, null))
             {
+                // 还原离线数据
+                if (!System.Object.ReferenceEquals(resObj.m_OfflineData, null))
+                {
+                    resObj.m_OfflineData.ResetProp();
+                }
+
                 resObj.m_Already = false;
 #if UNITY_EDITOR
                 // 只在编辑器模式下改名字，改名字操作很耗gc
@@ -91,6 +97,7 @@ public class ObjectManager : Singleton<ObjectManager>
             if (resObj.m_ResItem.m_Obj != null)
             {
                 resObj.m_CloneObj = GameObject.Instantiate(resObj.m_ResItem.m_Obj) as GameObject;
+                resObj.m_OfflineData = resObj.m_CloneObj.GetComponent<OfflineData>();
             }
         }
 
@@ -272,6 +279,7 @@ public class ObjectManager : Singleton<ObjectManager>
         else
         {
             resObj.m_CloneObj = GameObject.Instantiate(resObj.m_ResItem.m_Obj) as GameObject;
+            resObj.m_OfflineData = resObj.m_CloneObj.GetComponent<OfflineData>();
         }
 
         // 加载完成就从正在加载的异步中移除
@@ -427,5 +435,22 @@ public class ObjectManager : Singleton<ObjectManager>
         {
             m_ObjectPoolDic.Remove(crc);
         }
+    }
+
+    /// <summary>
+    /// 根据实例化对象直接获得离线数据，而不是用getCompnent，getComponent也是一个比较耗时的操作
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public OfflineData FindOfflineData(GameObject obj)
+    {
+        OfflineData data = null;
+        ResourceObj resObj = null;
+        m_ResourceObjDic.TryGetValue(obj.GetInstanceID(), out resObj);
+        if (resObj != null)
+        {
+            data = resObj.m_OfflineData;
+        }
+        return data;
     }
 }

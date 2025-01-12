@@ -1125,6 +1125,8 @@ public class ResourceObj
     public OnAsyncObjFinish m_DealFinish = null;
     // 异步参数
     public object m_param1, m_param2, m_param3 = null;
+    // 离线数据
+    public OfflineData m_OfflineData = null;
 
     public void Reset()
     {
@@ -1137,5 +1139,6 @@ public class ResourceObj
         m_SetSceneParent = false;
         m_DealFinish = null;
         m_param1 = m_param2 = m_param3 = null;
+        m_OfflineData = null;
     }
 }
