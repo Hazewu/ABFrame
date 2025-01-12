@@ -78,7 +78,7 @@ public class UIManager : Singleton<UIManager>
     /// </summary>
     public void OnUpdate()
     {
-        for (int i = 0; i > m_WindowList.Count; i++)
+        for (int i = 0; i < m_WindowList.Count; i++)
         {
             if (m_WindowList[i] != null)
             {

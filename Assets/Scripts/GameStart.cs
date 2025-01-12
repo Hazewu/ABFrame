@@ -25,12 +25,20 @@ public class GameStart : MonoBehaviour
         );
         RegisterUI();
 
-        UIManager.Instance.PopUpWnd("MenuPanel.prefab");
+        GameMapManager.Instance.Init(this);
+
+        GameMapManager.Instance.LoadScene(ConstStr_UI.SCENE_MENU);
     }
 
     private void RegisterUI()
     {
-        UIManager.Instance.Register<MenuUI>("MenuPanel.prefab");
+        UIManager.Instance.Register<MenuUI>(ConstStr_UI.PREFAB_PANEL_MENU);
+        UIManager.Instance.Register<LoadingUI>(ConstStr_UI.PREFAB_PANEL_LOADING);
+    }
+
+    private void Update()
+    {
+        UIManager.Instance.OnUpdate();
     }
 
     private void OnApplicationQuit()

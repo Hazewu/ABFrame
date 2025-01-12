@@ -72,12 +72,15 @@
     <Compile Include="Assets\Scripts\UGUI\Panel\MenuPanel.cs" />
     <Compile Include="Assets\Scripts\UGUI\UIManager.cs" />
     <Compile Include="Assets\Scripts\UGUI\Window\HaWindow.cs" />
+    <Compile Include="Assets\Scripts\UGUI\Panel\LoadingPanel.cs" />
+    <Compile Include="Assets\Scripts\ConstStr.cs" />
     <Compile Include="Assets\Scripts\Frame\ObjectManager.cs" />
-    <Compile Include="Assets\Scripts\TestAB.cs" />
+    <Compile Include="Assets\Scripts\GameMapManager.cs" />
     <Compile Include="Assets\Scripts\OfflineData\UIOfflineData.cs" />
     <Compile Include="Assets\Scripts\AssetBundleConfig.cs" />
     <Compile Include="Assets\Scripts\OfflineData\EffectOfflineData.cs" />
     <Compile Include="Assets\Scripts\GameStart.cs" />
+    <Compile Include="Assets\Scripts\UGUI\Window\LoadingUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AssetBundleConfig.xml" />
