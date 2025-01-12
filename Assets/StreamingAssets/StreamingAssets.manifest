@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 945365581
+CRC: 2831372457
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -18,4 +18,10 @@ AssetBundleManifest:
         Dependency_0: ui
     Info_4:
       Name: assetbundleconfig
+      Dependencies: {}
+    Info_5:
+      Name: gamestart
+      Dependencies: {}
+    Info_6:
+      Name: menupanel
       Dependencies: {}

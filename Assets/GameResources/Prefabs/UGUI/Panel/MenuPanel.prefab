@@ -87,7 +87,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1765820508864002023}
-  m_Layer: 0
+  - component: {fileID: 8282799514148644055}
+  - component: {fileID: 2959756721186319768}
+  m_Layer: 5
   m_Name: MenuPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,6 +116,119 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8282799514148644055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5876609734497454215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 854d49fe84eb6f3408214d8f38d587e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StartBtn: {fileID: 1017005466639968028}
+  m_LoadBtn: {fileID: 213351738019935724}
+  m_ExitBtn: {fileID: 5709611817090259630}
+--- !u!114 &2959756721186319768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5876609734497454215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff327831b7d5e34bb0563c1fb9fc5f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RigidBody: {fileID: 0}
+  m_Collider: {fileID: 0}
+  m_AllPoint:
+  - {fileID: 1765820508864002023}
+  - {fileID: 6937172678074471723}
+  - {fileID: 1700650047201368186}
+  - {fileID: 7059129414146836392}
+  - {fileID: 8994297353151572165}
+  - {fileID: 9080464675676331066}
+  - {fileID: 5692068795781157209}
+  - {fileID: 2866390763941680522}
+  m_AllChildCount: 0100000003000000010000000000000001000000000000000100000000000000
+  m_AllActive: 0101010101010101
+  m_AllPos:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: -200, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: -320, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: -443, z: 0}
+  - {x: 0, y: 0, z: 0}
+  m_AllScale:
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 1, z: 1}
+  m_AllRot:
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: -0, y: -0, z: -0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: -0, y: -0, z: -0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: -0, y: -0, z: -0, w: 1}
+  m_AllAnchorMax:
+  - {x: 1, y: 1}
+  - {x: 1, y: 1}
+  - {x: 0.5, y: 0.5}
+  - {x: 1, y: 1}
+  - {x: 0.5, y: 0.5}
+  - {x: 1, y: 1}
+  - {x: 0.5, y: 0.5}
+  - {x: 1, y: 1}
+  m_AllAnchorMin:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0.5, y: 0.5}
+  - {x: 0, y: 0}
+  - {x: 0.5, y: 0.5}
+  - {x: 0, y: 0}
+  - {x: 0.5, y: 0.5}
+  - {x: 0, y: 0}
+  m_AllPivot:
+  - {x: 0.5, y: 0.5}
+  - {x: 0.5, y: 0.5}
+  - {x: 0.5, y: 0.5}
+  - {x: 0.5, y: 0.5}
+  - {x: 0.5, y: 0.5}
+  - {x: 0.5, y: 0.5}
+  - {x: 0.5, y: 0.5}
+  - {x: 0.5, y: 0.5}
+  m_AllSizeDelta:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 300, y: 80}
+  - {x: 0, y: 0}
+  - {x: 300, y: 80}
+  - {x: 0, y: 0}
+  - {x: 300, y: 80}
+  - {x: 0, y: 0}
+  m_AllAnchoredPos:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: -200, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: -320, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: -443, z: 0}
+  - {x: 0, y: 0, z: 0}
+  m_AllParticle: []
 --- !u!1 &6033080085513608321
 GameObject:
   m_ObjectHideFlags: 0

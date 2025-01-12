@@ -62,14 +62,16 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\OfflineData\OfflineData.cs" />
     <Compile Include="Assets\Scripts\Frame\ClassObjectPool.cs" />
+    <Compile Include="Assets\Scripts\UGUI\Window\MenuUI.cs" />
     <Compile Include="Assets\Scripts\CRC32.cs" />
     <Compile Include="Assets\Scripts\Frame\AssetBundleManager.cs" />
     <Compile Include="Assets\Scripts\Frame\ResourceManager.cs" />
-    <Compile Include="Assets\Scripts\UGUI\HaWindow.cs" />
     <Compile Include="Assets\Scripts\UGUI\BaseItem.cs" />
     <Compile Include="Assets\Scripts\Frame\Singleton.cs" />
     <Compile Include="Assets\Scripts\TestGameStart.cs" />
+    <Compile Include="Assets\Scripts\UGUI\Panel\MenuPanel.cs" />
     <Compile Include="Assets\Scripts\UGUI\UIManager.cs" />
+    <Compile Include="Assets\Scripts\UGUI\Window\HaWindow.cs" />
     <Compile Include="Assets\Scripts\Frame\ObjectManager.cs" />
     <Compile Include="Assets\Scripts\TestAB.cs" />
     <Compile Include="Assets\Scripts\OfflineData\UIOfflineData.cs" />

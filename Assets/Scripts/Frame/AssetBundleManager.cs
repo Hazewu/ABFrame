@@ -174,13 +174,15 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
     }
 
     /// <summary>
-    /// 根据crc找到ResourceItem
+    /// 根据crc找到ResourceItem，如果不存在，一定是未打成AB包
     /// </summary>
     /// <param name="crc">由资源路径转换的crc</param>
     /// <returns></returns>
     public ResourceItem FindResourceItem(uint crc)
     {
-        return m_ResourceItemDic[crc];
+        ResourceItem item = null;
+        m_ResourceItemDic.TryGetValue(crc, out item);
+        return item;
     }
 }
 

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3938771761
+CRC: 3332962300
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 004c49479c01314e45337ccdd0bd4c63
+    Hash: 1260f89d1d2faf001ef3a6f1fa5b5bd4
   TypeTreeHash:
     serializedVersion: 2
     Hash: b2cd636646762a7ae57ab7a268c4da95
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 004c49479c01314e45337ccdd0bd4c63
+    Hash: 1260f89d1d2faf001ef3a6f1fa5b5bd4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -38,4 +38,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/GameResources/Prefabs/Door.prefab
 Dependencies:
-- /Users/hazewu/Public/unityWorkspace/ABFrame/Assets/StreamingAssets/ui
+- F:/unityWorkspace/ABFrame/Assets/StreamingAssets/ui

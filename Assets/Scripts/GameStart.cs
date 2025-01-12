@@ -1,6 +1,51 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
+#region UI 加载框架
+public class GameStart : MonoBehaviour
+{
+    private void Awake()
+    {
+        // 切换场景时，不销毁GameStart
+        DontDestroyOnLoad(gameObject);
+        AssetBundleManager.Instance.LoadAssetBundleConfig();
+        ResourceManager.Instance.Init(this);
+        ObjectManager.Instance.Init(transform.Find("RecyclePoolTrs"), transform.Find("SceneTrs"));
+    }
+
+    private void Start()
+    {
+        UIManager.Instance.Init(
+            transform.Find("UIRoot") as RectTransform,
+            transform.Find("UIRoot/WndRoot") as RectTransform,
+            transform.Find("UIRoot/UICamera").GetComponent<Camera>(),
+            transform.Find("UIRoot/EventSystem").GetComponent<EventSystem>()
+        );
+        RegisterUI();
+
+        UIManager.Instance.PopUpWnd("MenuPanel.prefab");
+    }
+
+    private void RegisterUI()
+    {
+        UIManager.Instance.Register<MenuUI>("MenuPanel.prefab");
+    }
+
+    private void OnApplicationQuit()
+    {
+#if UNITY_EDITOR
+        //ResourceManager.Instance.ClearCache();
+        Resources.UnloadUnusedAssets();
+        Debug.Log("清空编辑器缓存");
+#endif
+    }
+}
+#endregion
+
+
+
 
 #region test ObjectManager异步加载
 //public class GameStart : MonoBehaviour
@@ -64,59 +109,59 @@ using UnityEngine;
 
 
 #region test ObjectManager同步加载 和 预加载
-public class GameStart : MonoBehaviour
-{
-    private GameObject obj;
-    private void Awake()
-    {
-        // 切换场景时，不销毁GameStart
-        DontDestroyOnLoad(gameObject);
-        AssetBundleManager.Instance.LoadAssetBundleConfig();
-        ResourceManager.Instance.Init(this);
-        ObjectManager.Instance.Init(transform.Find("RecyclePoolTrs"), transform.Find("SceneTrs"));
-    }
+//public class GameStart : MonoBehaviour
+//{
+//    private GameObject obj;
+//    private void Awake()
+//    {
+//        // 切换场景时，不销毁GameStart
+//        DontDestroyOnLoad(gameObject);
+//        AssetBundleManager.Instance.LoadAssetBundleConfig();
+//        ResourceManager.Instance.Init(this);
+//        ObjectManager.Instance.Init(transform.Find("RecyclePoolTrs"), transform.Find("SceneTrs"));
+//    }
 
-    private void Start()
-    {
-        //obj = ObjectManager.Instance.InstantiateObject("Assets/GameResources/Prefabs/Door.prefab");
-        ObjectManager.Instance.PreloadGameObject("Assets/GameResources/Prefabs/Door.prefab", 5);
-    }
+//    private void Start()
+//    {
+//        //obj = ObjectManager.Instance.InstantiateObject("Assets/GameResources/Prefabs/Door.prefab");
+//        ObjectManager.Instance.PreloadGameObject("Assets/GameResources/Prefabs/Door.prefab", 5);
+//    }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A) && obj)
-        {
-            // 缓存，不销毁
-            ObjectManager.Instance.ReleaseObject(obj);
-            obj = null;
-        }
-        else if (Input.GetKeyDown(KeyCode.D) && obj == null)
-        {
-            obj = ObjectManager.Instance.InstantiateObject("Assets/GameResources/Prefabs/Door.prefab", true);
-        }
-        else if (Input.GetKeyDown(KeyCode.S) && obj)
-        {
-            // 销毁
-            ObjectManager.Instance.ReleaseObject(obj, 0, true);
-            obj = null;
-        }
-        else if (Input.GetKeyDown(KeyCode.W) && obj)
-        {
-            // 隐藏
-            ObjectManager.Instance.ReleaseObject(obj, -1, false, false);
-            obj = null;
-        }
-    }
+//    private void Update()
+//    {
+//        if (Input.GetKeyDown(KeyCode.A) && obj)
+//        {
+//            // 缓存，不销毁
+//            ObjectManager.Instance.ReleaseObject(obj);
+//            obj = null;
+//        }
+//        else if (Input.GetKeyDown(KeyCode.D) && obj == null)
+//        {
+//            obj = ObjectManager.Instance.InstantiateObject("Assets/GameResources/Prefabs/Door.prefab", true);
+//        }
+//        else if (Input.GetKeyDown(KeyCode.S) && obj)
+//        {
+//            // 销毁
+//            ObjectManager.Instance.ReleaseObject(obj, 0, true);
+//            obj = null;
+//        }
+//        else if (Input.GetKeyDown(KeyCode.W) && obj)
+//        {
+//            // 隐藏
+//            ObjectManager.Instance.ReleaseObject(obj, -1, false, false);
+//            obj = null;
+//        }
+//    }
 
-    private void OnApplicationQuit()
-    {
-#if UNITY_EDITOR
-        //ResourceManager.Instance.ClearCache();
-        Resources.UnloadUnusedAssets();
-        Debug.Log("清空编辑器缓存");
-#endif
-    }
-}
+//    private void OnApplicationQuit()
+//    {
+//#if UNITY_EDITOR
+//        //ResourceManager.Instance.ClearCache();
+//        Resources.UnloadUnusedAssets();
+//        Debug.Log("清空编辑器缓存");
+//#endif
+//    }
+//}
 
 #endregion
 
