@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 769639267
+CRC: 2586512868
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -36,4 +36,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/GameResources/Prefabs/Right.prefab
 Dependencies:
-- F:/unityWorkspace/ABFrame/Assets/StreamingAssets/ui
+- F:/unityWorkspace/RealFrame/Assets/../AssetBundle/StandaloneWindows64/ui

@@ -8,3 +8,5 @@ ProjectSettings/ProjectVersion.txt
 Packages/packages-lock.json
 Packages/manifest.json
 MemoryCaptures
+BuildTarget
+AssetBundle

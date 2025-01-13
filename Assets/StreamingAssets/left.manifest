@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2726170059
+CRC: 161151819
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 52a0c8653d57e24e4d2bb054e36371a8
+    Hash: 029f571b1fb11ab094bda5ded9e36736
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ffad8e4f25c248782173d7d2515a6d6
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 52a0c8653d57e24e4d2bb054e36371a8
+    Hash: 029f571b1fb11ab094bda5ded9e36736
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -46,4 +46,4 @@ Assets:
 - Assets/GameResources/Prefabs/Left.prefab
 - Assets/GameResources/Animations/Heal_0.controller
 Dependencies:
-- F:/unityWorkspace/ABFrame/Assets/StreamingAssets/ui
+- F:/unityWorkspace/RealFrame/Assets/../AssetBundle/StandaloneWindows64/ui

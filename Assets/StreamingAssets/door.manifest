@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3332962300
+CRC: 2188000749
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -38,4 +38,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/GameResources/Prefabs/Door.prefab
 Dependencies:
-- F:/unityWorkspace/ABFrame/Assets/StreamingAssets/ui
+- F:/unityWorkspace/RealFrame/Assets/../AssetBundle/StandaloneWindows64/ui

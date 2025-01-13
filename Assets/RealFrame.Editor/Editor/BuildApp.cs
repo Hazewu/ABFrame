@@ -40,7 +40,7 @@ public class BuildApp
         }
         BuildPipeline.BuildPlayer(FindEnableEditorScenes(), savePath, EditorUserBuildSettings.activeBuildTarget, BuildOptions.None);
 
-        DeleteDir(Application.streamingAssetsPath);
+        //DeleteDir(Application.streamingAssetsPath);
     }
 
     private static string[] FindEnableEditorScenes()
