@@ -18,6 +18,7 @@ public class GameStart : MonoSingleton<GameStart>
 
     private void Start()
     {
+        LoadConfig();
         UIManager.Instance.Init(
             transform.Find("UIRoot") as RectTransform,
             transform.Find("UIRoot/WndRoot") as RectTransform,
@@ -32,6 +33,11 @@ public class GameStart : MonoSingleton<GameStart>
         //ResourceManager.Instance.PreloadRes(ConstStr_Sound.BGM_MENU);
 
         GameMapManager.Instance.LoadScene(ConstStr_UI.SCENE_MENU);
+    }
+
+    private void LoadConfig()
+    {
+
     }
 
     private void RegisterUI()
