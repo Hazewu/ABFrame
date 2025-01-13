@@ -14,21 +14,21 @@ public class MenuUI : HaWindow
         AddButtonClickListener(m_MainPanel.m_LoadBtn, OnLoadBtnClicked);
         AddButtonClickListener(m_MainPanel.m_ExitBtn, OnExitBtnClicked);
 
-        //m_Clip = ResourceManager.Instance.LoadResource<AudioClip>(ConstStr_Sound.BGM_MENU);
-        //m_MainPanel.m_AudioSource.clip = m_Clip;
-        //m_MainPanel.m_AudioSource.Play();
+        m_Clip = ResourceManager.Instance.LoadResource<AudioClip>(ConstStr_Sound.BGM_MENU);
+        m_MainPanel.m_AudioSource.clip = m_Clip;
+        m_MainPanel.m_AudioSource.Play();
     }
 
-    //public override void OnUpdate()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.A) && m_Clip != null)
-    //    {
-    //        Debug.Log("AAAAAAAAAAA");
-    //        ResourceManager.Instance.ReleaseResource(m_Clip, true);
-    //        m_MainPanel.m_AudioSource.clip = null;
-    //        m_Clip = null;
-    //    }
-    //}
+    public override void OnUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.A) && m_Clip != null)
+        {
+            Debug.Log("AAAAAAAAAAA");
+            ResourceManager.Instance.ReleaseResource(m_Clip, true);
+            m_MainPanel.m_AudioSource.clip = null;
+            m_Clip = null;
+        }
+    }
 
     private void OnStartBtnClicked()
     {
