@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
@@ -12,28 +12,28 @@ public enum UIMsgID
 
 public class UIManager : Singleton<UIManager>
 {
-    // UI¸ù½Úµã
+    // UIæ ¹èŠ‚ç‚¹
     private RectTransform m_UIRoot;
-    // ´°¿Ú¸ù½Úµã
+    // çª—å£æ ¹èŠ‚ç‚¹
     private RectTransform m_WndRoot;
-    // UIÉãÏñ»ú
+    // UIæ‘„åƒæœº
     private Camera m_UICamera;
-    // EventSystem½Úµã£¬ÒªÓĞÕâ¸öUIµã»÷²ÅÓĞÏìÓ¦
+    // EventSystemèŠ‚ç‚¹ï¼Œè¦æœ‰è¿™ä¸ªUIç‚¹å‡»æ‰æœ‰å“åº”
     private EventSystem m_EventSystem;
-    // ÆÁÄ»µÄ¿í¸ß±È
+    // å±å¹•çš„å®½é«˜æ¯”
     private float m_CanvasRate = 0;
 
-    // UIµÄ´°¿ÚÂ·¾¶
+    // UIçš„çª—å£è·¯å¾„
     private const string UI_PREFAB_PATH = "Assets/GameResources/Prefabs/UGUI/Panel/";
-    // ×¢²áµÄ´°¿Ú
+    // æ³¨å†Œçš„çª—å£
     private Dictionary<string, System.Type> m_RegisterDic = new Dictionary<string, System.Type>();
-    // ËùÓĞ´ò¿ªµÄ´°¿Ú
+    // æ‰€æœ‰æ‰“å¼€çš„çª—å£
     private Dictionary<string, HaWindow> m_WindowDic = new Dictionary<string, HaWindow>();
-    // ËùÓĞ´ò¿ªµÄ´°¿ÚÁĞ±í
+    // æ‰€æœ‰æ‰“å¼€çš„çª—å£åˆ—è¡¨
     private List<HaWindow> m_WindowList = new List<HaWindow>();
 
     /// <summary>
-    /// ³õÊ¼»¯
+    /// åˆå§‹åŒ–
     /// </summary>
     /// <param name="uiRoot"></param>
     /// <param name="wndRoot"></param>
@@ -49,7 +49,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ÏÔÊ¾»òÕßÒş²ØËùÓĞUI
+    /// æ˜¾ç¤ºæˆ–è€…éšè—æ‰€æœ‰UI
     /// </summary>
     /// <param name="show"></param>
     public void ShowOrHideUIRoot(bool show)
@@ -61,7 +61,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ÉèÖÃÄ¬ÈÏÑ¡Ôñ¶ÔÏó
+    /// è®¾ç½®é»˜è®¤é€‰æ‹©å¯¹è±¡
     /// </summary>
     /// <param name="obj"></param>
     public void SetNormalSelectObj(GameObject obj)
@@ -74,7 +74,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¸üĞÂËùÓĞ´ò¿ªµÄ´°¿Ú
+    /// æ›´æ–°æ‰€æœ‰æ‰“å¼€çš„çª—å£
     /// </summary>
     public void OnUpdate()
     {
@@ -88,7 +88,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¸ù¾İ´°¿ÚÃû²éÕÒ´°¿Ú
+    /// æ ¹æ®çª—å£åæŸ¥æ‰¾çª—å£
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="name"></param>
@@ -111,19 +111,19 @@ public class UIManager : Singleton<UIManager>
             System.Type type = null;
             if (m_RegisterDic.TryGetValue(wndName, out type))
             {
-                // ¸ù¾İÀàĞÍ£¬ÊµÀı»¯Àà
+                // æ ¹æ®ç±»å‹ï¼Œå®ä¾‹åŒ–ç±»
                 wnd = System.Activator.CreateInstance(type) as HaWindow;
             }
             else
             {
-                Debug.LogError("ÕÒ²»µ½´°¿Ú¶ÔÓ¦µÄ½Å±¾£¬´°¿ÚÃûÊÇ£º" + wndName);
+                Debug.LogError("æ‰¾ä¸åˆ°çª—å£å¯¹åº”çš„è„šæœ¬ï¼Œçª—å£åæ˜¯ï¼š" + wndName);
                 return null;
             }
 
             GameObject wndObj = ObjectManager.Instance.InstantiateObject(UI_PREFAB_PATH + wndName, false, false);
             if (wndObj == null)
             {
-                Debug.LogError("´´½¨´°¿ÚPrefabÊ§°Ü£º" + wndName);
+                Debug.LogError("åˆ›å»ºçª—å£Prefabå¤±è´¥ï¼š" + wndName);
                 return null;
             }
 
@@ -137,7 +137,7 @@ public class UIManager : Singleton<UIManager>
             wnd.WndTrans = wndObj.transform;
             wnd.Name = wndName;
             wnd.Awake(paramArr);
-            // Ìí¼Óµ½´°¿Ú¸ù½Úµã
+            // æ·»åŠ åˆ°çª—å£æ ¹èŠ‚ç‚¹
             wndObj.transform.SetParent(m_WndRoot, false);
 
             ShowWnd(wnd, bTop, paramArr);
@@ -150,10 +150,10 @@ public class UIManager : Singleton<UIManager>
         return wnd;
     }
     /// <summary>
-    /// ´°¿Ú×¢²á·½·¨
+    /// çª—å£æ³¨å†Œæ–¹æ³•
     /// </summary>
-    /// <typeparam name="T">´°¿Ú·ºĞÍÀà</typeparam>
-    /// <param name="name">´°¿ÚÃû</param>
+    /// <typeparam name="T">çª—å£æ³›å‹ç±»</typeparam>
+    /// <param name="name">çª—å£å</param>
     public void Register<T>(string name) where T : HaWindow
     {
         if (!m_RegisterDic.ContainsKey(name))
@@ -163,7 +163,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ·¢ËÍÏûÏ¢¸ø´°¿Ú
+    /// å‘é€æ¶ˆæ¯ç»™çª—å£
     /// </summary>
     /// <param name="name"></param>
     /// <param name="msgID"></param>
@@ -180,7 +180,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¸ù¾İ´°¿ÚÃû×ÖÏÔÊ¾´°¿Ú
+    /// æ ¹æ®çª—å£åå­—æ˜¾ç¤ºçª—å£
     /// </summary>
     /// <param name="name"></param>
     /// <param name="bTop"></param>
@@ -192,7 +192,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¸ù¾İ´°¿Ú¶ÔÏóÏÔÊ¾´°¿Ú
+    /// æ ¹æ®çª—å£å¯¹è±¡æ˜¾ç¤ºçª—å£
     /// </summary>
     /// <param name="wnd"></param>
     /// <param name="bTop"></param>
@@ -207,7 +207,7 @@ public class UIManager : Singleton<UIManager>
             }
             if (bTop)
             {
-                // ÒÆµ½×îºóäÖÈ¾£¬ÔòÏÔÊ¾ÔÚ×îÉÏÃæ
+                // ç§»åˆ°æœ€åæ¸²æŸ“ï¼Œåˆ™æ˜¾ç¤ºåœ¨æœ€ä¸Šé¢
                 wnd.WndTrans.SetAsLastSibling();
             }
             wnd.OnShow(paramArr);
@@ -215,7 +215,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¸ù¾İ´°¿ÚÃû×Ö¹Ø±Õ´°¿Ú
+    /// æ ¹æ®çª—å£åå­—å…³é—­çª—å£
     /// </summary>
     /// <param name="name"></param>
     /// <param name="destroy"></param>
@@ -226,7 +226,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¸ù¾İ´°¿Ú¶ÔÏó¹Ø±Õ´°¿Ú
+    /// æ ¹æ®çª—å£å¯¹è±¡å…³é—­çª—å£
     /// </summary>
     /// <param name="wnd"></param>
     /// <param name="destroy"></param>
@@ -256,7 +256,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¹Ø±ÕËùÓĞ´°¿Ú
+    /// å…³é—­æ‰€æœ‰çª—å£
     /// </summary>
     public void CloseAllWnd()
     {
@@ -267,7 +267,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ÇĞ»»µ½Î¨Ò»´°¿Ú
+    /// åˆ‡æ¢åˆ°å”¯ä¸€çª—å£
     /// </summary>
     /// <param name="name"></param>
     /// <param name="bTop"></param>
@@ -279,7 +279,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¸ù¾İÃû×ÖÒş²Ø´°¿Ú
+    /// æ ¹æ®åå­—éšè—çª—å£
     /// </summary>
     /// <param name="name"></param>
     public void HideWnd(string name)
@@ -289,7 +289,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     /// <summary>
-    /// ¸ù¾İ´°¿Ú¶ÔÏóÒş²Ø´°¿Ú
+    /// æ ¹æ®çª—å£å¯¹è±¡éšè—çª—å£
     /// </summary>
     /// <param name="wnd"></param>
     public void HideWnd(HaWindow wnd)

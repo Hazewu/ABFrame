@@ -27,6 +27,9 @@ public class GameStart : MonoBehaviour
 
         GameMapManager.Instance.Init(this);
 
+        ObjectManager.Instance.PreloadGameObject(ConstStr_Obj.PREFAB_DOOR, 5);
+        ResourceManager.Instance.PreloadRes(ConstStr_Sound.BGM_MENU);
+
         GameMapManager.Instance.LoadScene(ConstStr_UI.SCENE_MENU);
     }
 

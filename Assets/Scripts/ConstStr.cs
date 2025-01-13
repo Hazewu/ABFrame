@@ -15,3 +15,13 @@ public class ConstStr_UI
     public const string SCENE_EMPTY = "Empty";
     public const string SCENE_MENU = "Menu";
 }
+
+public class ConstStr_Obj
+{
+    public const string PREFAB_DOOR = "Assets/GameResources/Prefabs/Door.prefab";
+}
+
+public class ConstStr_Sound
+{
+    public const string BGM_MENU = "Assets/GameResources/Audioclips/Battle.mp3";
+}

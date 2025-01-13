@@ -8,7 +8,7 @@ public class ResourceManager : Singleton<ResourceManager>
     // 辅助取消异步加载的唯一id
     private long m_Guid = 0;
     // 是否从AB包中加载资源
-    private bool m_LoadFromAssetBundle = false;
+    private bool m_LoadFromAssetBundle = true;
     // 缓存引用计数为零的资源列表，游戏资源能快速加载，达到缓存最大的时候释放这个列表里面最早没用的资源
     private CMapList<ResourceItem> m_NoReferenceAssetMapList = new CMapList<ResourceItem>();
     // 缓存使用的资源列表
@@ -27,6 +27,9 @@ public class ResourceManager : Singleton<ResourceManager>
 
     // 最长连续卡着加载资源的时间，单位微秒
     private const long MAXLOADRESITEM = 200000;
+
+    // 最大缓存个数
+    private const int MAXCACHECOUNT = 500;
 
     public void Init(MonoBehaviour mono)
     {
@@ -79,6 +82,7 @@ public class ResourceManager : Singleton<ResourceManager>
         {
             AssetDic.Add(item.m_Crc, item);
         }
+        WashOut();
     }
 
     /// <summary>
@@ -95,15 +99,15 @@ public class ResourceManager : Singleton<ResourceManager>
     /// </summary>
     private void WashOut()
     {
-        //// 当，当前内存使用大于80%时，进行清除最早没用的资源
-        //{
-        //    if (m_NoReferenceAssetMapList.size() <= 0)
-        //        return;
-
-        //    ResourceItem item = m_NoReferenceAssetMapList.Back();
-        //    DestroyResourceItem(item, true);
-        //    m_NoReferenceAssetMapList.Pop();
-        //}
+        // 当，当前内存使用大于80%时，进行清除最早没用的资源，何时大于80%，需要Android和iOS提供API
+        while (m_NoReferenceAssetMapList.Size() >= MAXCACHECOUNT)
+        {
+            for (int i = 0; i < MAXCACHECOUNT / 2; i++)
+            {
+                ResourceItem item = m_NoReferenceAssetMapList.Back();
+                DestroyResourceItem(item, true);
+            }
+        }
     }
 
 #if UNITY_EDITOR
@@ -184,6 +188,8 @@ public class ResourceManager : Singleton<ResourceManager>
         {
             return;
         }
+
+        m_NoReferenceAssetMapList.Remove(item);
 
         // 释放assetBundle引用
         AssetBundleManager.Instance.ReleaseAsset(item);

@@ -387,6 +387,7 @@ public class ObjectManager : Singleton<ObjectManager>
                     GameObject.Destroy(resObj.m_CloneObj);
                     resObj.Reset();
                     m_ResourceObjPool.Recycle(resObj);
+                    st.Remove(resObj);
                 }
             }
             if (st.Count <= 0)
