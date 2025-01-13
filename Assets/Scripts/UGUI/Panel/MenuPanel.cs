@@ -10,4 +10,7 @@ public class MenuPanel : MonoBehaviour
     public Button m_ExitBtn;
 
     public AudioSource m_AudioSource;
+
+    public Image m_Img1;
+    public Image m_Img2;
 }

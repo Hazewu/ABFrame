@@ -10,6 +10,9 @@
   </ABList>
   <ABList Path="Assets/GameResources/Prefabs/UGUI/Panel/LoadingPanel.prefab" Crc="387264661" ABName="loadingpanel" AssetName="LoadingPanel.prefab" />
   <ABList Path="Assets/GameResources/Prefabs/UGUI/Panel/MenuPanel.prefab" Crc="3730736878" ABName="menupanel" AssetName="MenuPanel.prefab" />
+  <ABList Path="Assets/GameResources/Prefabs/Right.prefab" Crc="4056264703" ABName="right" AssetName="Right.prefab">
+    <ABDepends>ui</ABDepends>
+  </ABList>
   <ABList Path="Assets/GameResources/Audioclips/AttackSound.mp3" Crc="2786147098" ABName="sound" AssetName="AttackSound.mp3" />
   <ABList Path="Assets/GameResources/Audioclips/Battle.mp3" Crc="2508818099" ABName="sound" AssetName="Battle.mp3" />
   <ABList Path="Assets/GameResources/Audioclips/Dog.mp3" Crc="3266803558" ABName="sound" AssetName="Dog.mp3" />

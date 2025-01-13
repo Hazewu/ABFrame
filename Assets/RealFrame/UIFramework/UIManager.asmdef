@@ -1,0 +1,17 @@
+{
+    "name": "UIManagerr",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4914e92597eb119438c5c31d8e6ca4c7",
+        "GUID:0d37805bbc55a6847a6114c594435bac"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

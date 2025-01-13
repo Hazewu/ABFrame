@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3961721838
+CRC: 3852163947
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -28,3 +28,7 @@ AssetBundleManifest:
     Info_7:
       Name: loadingpanel
       Dependencies: {}
+    Info_8:
+      Name: right
+      Dependencies:
+        Dependency_0: ui

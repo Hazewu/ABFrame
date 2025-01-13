@@ -8,8 +8,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class BundleEditor
 {
-    public static string ABCONFIGPATH = "Assets/Editor/ABConfig.asset";
-    public static string m_BundleTargetPath = Application.streamingAssetsPath;
+    private static string m_BundleTargetPath = Application.streamingAssetsPath;
+    private static string ABCONFIGPATH = "Assets/RealFrame.Editor/Editor/Resource/ABConfig.asset";
+    private static string ABBYTEPATH = "Assets/GameData/ABData/AssetBundleConfig.bytes";
 
     // key是ab包名，value是路径，所有文件夹ab包dic
     private static Dictionary<string, string> m_AllFileDir = new Dictionary<string, string>();
@@ -170,7 +171,7 @@ public class BundleEditor
                 if (tempPath.EndsWith(".cs"))
                     continue;
 
-                Debug.Log("此AB包：" + name + " 下面包含的资源文件路径：" + tempPath);
+                //Debug.Log("此AB包：" + name + " 下面包含的资源文件路径：" + tempPath);
                 // TODO，怎么感觉用反了？仔细想想
                 if (ValidPath(tempPath))
                 {
@@ -278,11 +279,16 @@ public class BundleEditor
             // 二进制中不需要实际的路径，用crc就行了
             ab.Path = "";
         }
-        string bytePath = Application.dataPath + "/GameData/ABData/AssetBundleConfig.bytes";
+        string bytePath = ABBYTEPATH;
         if (File.Exists(bytePath)) File.Delete(bytePath);
-        FileStream binaryFs = new FileStream(bytePath, FileMode.Create, FileAccess.ReadWrite);
+        FileStream binaryFs = new FileStream(bytePath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+        binaryFs.Seek(0, SeekOrigin.Begin);
+        binaryFs.SetLength(0);
         BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(binaryFs, config);
         binaryFs.Close();
+        AssetDatabase.Refresh();
+
+        SetABName("assetbundleconfig", bytePath);
     }
 }

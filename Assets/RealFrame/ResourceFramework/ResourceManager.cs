@@ -8,7 +8,7 @@ public class ResourceManager : Singleton<ResourceManager>
     // 辅助取消异步加载的唯一id
     private long m_Guid = 0;
     // 是否从AB包中加载资源
-    private bool m_LoadFromAssetBundle = true;
+    private bool m_LoadFromAssetBundle = false;
     // 缓存引用计数为零的资源列表，游戏资源能快速加载，达到缓存最大的时候释放这个列表里面最早没用的资源
     private CMapList<ResourceItem> m_NoReferenceAssetMapList = new CMapList<ResourceItem>();
     // 缓存使用的资源列表
@@ -277,6 +277,17 @@ public class ResourceManager : Singleton<ResourceManager>
             // 每一轮加载，高、中、低，而不是全部高执行完成后再去中、低
             for (int i = 0; i < (int)LoadResPriority.RES_NUM; i++)
             {
+                // 新加，把所有的高级加载完后，再加载中、低
+                if (m_LoadingAssetList[(int)LoadResPriority.RES_HIGH].Count > 0)
+                {
+                    i = (int)LoadResPriority.RES_HIGH;
+                }
+                else if (m_LoadingAssetList[(int)LoadResPriority.RES_MIDDLE].Count > 0)
+                {
+                    i = (int)LoadResPriority.RES_MIDDLE;
+                }
+
+
                 List<AsyncLoadResParam> loadingList = m_LoadingAssetList[i];
                 if (loadingList.Count <= 0)
                     continue;
@@ -293,7 +304,14 @@ public class ResourceManager : Singleton<ResourceManager>
                 {
                     item = AssetBundleManager.Instance.FindResourceItem(loadingParam.m_Crc);
                     // item.m_obj肯定是空的，因为在之前已经判断过了，没缓存
-                    obj = LoadAssetByEditor<Object>(loadingParam.m_Path);
+                    if (loadingParam.m_IsSprite) 
+                    {
+                        obj = LoadAssetByEditor<Sprite>(loadingParam.m_Path);
+                    }
+                    else 
+                    {
+                        obj = LoadAssetByEditor<Object>(loadingParam.m_Path);
+                    }
                     // 模拟异步加载
                     yield return new WaitForSeconds(0.5f);
                 }
@@ -384,7 +402,7 @@ public class ResourceManager : Singleton<ResourceManager>
     /// <param name="param2"></param>
     /// <param name="param3"></param>
     /// <param name="crc"></param>
-    public void AsyncLoadResource(string path, OnAsyncObjFinish dealFinish, LoadResPriority priority, object param1 = null, object param2 = null, object param3 = null, uint crc = 0)
+    public void AsyncLoadResource(string path, OnAsyncObjFinish dealFinish, LoadResPriority priority, bool isSprite = false, object param1 = null, object param2 = null, object param3 = null, uint crc = 0)
     {
         if (crc == 0)
         {
@@ -411,6 +429,7 @@ public class ResourceManager : Singleton<ResourceManager>
             param.m_Crc = crc;
             param.m_Path = path;
             param.m_Priority = priority;
+            param.m_IsSprite = isSprite;
             m_LoadingAssetDic.Add(crc, param);
             // 加入到优先级列表，等待
             m_LoadingAssetList[(int)priority].Add(param);

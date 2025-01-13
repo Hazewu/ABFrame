@@ -14,21 +14,44 @@ public class MenuUI : HaWindow
         AddButtonClickListener(m_MainPanel.m_LoadBtn, OnLoadBtnClicked);
         AddButtonClickListener(m_MainPanel.m_ExitBtn, OnExitBtnClicked);
 
-        m_Clip = ResourceManager.Instance.LoadResource<AudioClip>(ConstStr_Sound.BGM_MENU);
-        m_MainPanel.m_AudioSource.clip = m_Clip;
-        m_MainPanel.m_AudioSource.Play();
+        //m_Clip = ResourceManager.Instance.LoadResource<AudioClip>(ConstStr_Sound.BGM_MENU);
+        //m_MainPanel.m_AudioSource.clip = m_Clip;
+        //m_MainPanel.m_AudioSource.Play();
+
+        ResourceManager.Instance.AsyncLoadResource("Assets/GameResources/UI/Escape.png", OnLoadSpriteTest1, LoadResPriority.RES_LOW, true);
+        ResourceManager.Instance.AsyncLoadResource("Assets/GameResources/UI/Head.png", OnLoadSpriteTest2, LoadResPriority.RES_HIGH, true);
     }
 
-    public override void OnUpdate()
+    private void OnLoadSpriteTest1(string path, Object obj, object param1 = null, object param2 = null, object param3 = null)
     {
-        if (Input.GetKeyDown(KeyCode.A) && m_Clip != null)
+        if (obj != null)
         {
-            Debug.Log("AAAAAAAAAAA");
-            ResourceManager.Instance.ReleaseResource(m_Clip, true);
-            m_MainPanel.m_AudioSource.clip = null;
-            m_Clip = null;
+            Sprite sp = obj as Sprite;
+            m_MainPanel.m_Img1.sprite = sp;
+            Debug.Log("图片1加载出来了");
         }
     }
+
+    private void OnLoadSpriteTest2(string path, Object obj, object param1 = null, object param2 = null, object param3 = null)
+    {
+        if (obj != null)
+        {
+            Sprite sp = obj as Sprite;
+            m_MainPanel.m_Img2.sprite = sp;
+            Debug.Log("图片2加载出来了");
+        }
+    }
+
+    //public override void OnUpdate()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.A) && m_Clip != null)
+    //    {
+    //        Debug.Log("AAAAAAAAAAA");
+    //        ResourceManager.Instance.ReleaseResource(m_Clip, true);
+    //        m_MainPanel.m_AudioSource.clip = null;
+    //        m_Clip = null;
+    //    }
+    //}
 
     private void OnStartBtnClicked()
     {

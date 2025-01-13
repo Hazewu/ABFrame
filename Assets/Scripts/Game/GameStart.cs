@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 #region UI 加载框架
-public class GameStart : MonoBehaviour
+public class GameStart : MonoSingleton<GameStart>
 {
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         // 切换场景时，不销毁GameStart
         DontDestroyOnLoad(gameObject);
         AssetBundleManager.Instance.LoadAssetBundleConfig();
@@ -27,8 +28,8 @@ public class GameStart : MonoBehaviour
 
         GameMapManager.Instance.Init(this);
 
-        ObjectManager.Instance.PreloadGameObject(ConstStr_Obj.PREFAB_DOOR, 5);
-        ResourceManager.Instance.PreloadRes(ConstStr_Sound.BGM_MENU);
+        //ObjectManager.Instance.PreloadGameObject(ConstStr_Obj.PREFAB_DOOR, 5);
+        //ResourceManager.Instance.PreloadRes(ConstStr_Sound.BGM_MENU);
 
         GameMapManager.Instance.LoadScene(ConstStr_UI.SCENE_MENU);
     }
