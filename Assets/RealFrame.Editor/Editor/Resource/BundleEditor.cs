@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class BundleEditor
 {
-    private static string m_BundleTargetPath = Application.streamingAssetsPath;
+    private static string m_BundleTargetPath = Application.dataPath + "/../AssetBundle/" + EditorUserBuildSettings.activeBuildTarget.ToString();
     private static string ABCONFIGPATH = "Assets/RealFrame.Editor/Editor/Resource/ABConfig.asset";
     private static string ABBYTEPATH = "Assets/GameData/ABData/AssetBundleConfig.bytes";
 
@@ -180,14 +180,28 @@ public class BundleEditor
             }
         }
 
-        DeleteAB();
+        // 如果不存在，则创建文件夹
+        if (!Directory.Exists(m_BundleTargetPath))
+        {
+            Directory.CreateDirectory(m_BundleTargetPath);
+        }
 
+        DeleteAB();
         // 生成自己的配置表
         WriteData(resPathDic);
 
+
         // 生成
-        BuildPipeline.BuildAssetBundles(Application.streamingAssetsPath, BuildAssetBundleOptions.ChunkBasedCompression,
+        AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(m_BundleTargetPath, BuildAssetBundleOptions.ChunkBasedCompression,
             EditorUserBuildSettings.activeBuildTarget);
+        if (manifest == null)
+        {
+            Debug.LogError("AssetBundle 打包失败！");
+        }
+        else
+        {
+            Debug.Log("AssetBundle 打包完毕");
+        }
     }
 
     private static bool ContainABName(string name, string[] strs)
