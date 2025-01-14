@@ -60,6 +60,30 @@ public class BinarySerializeOpt
     }
 
     /// <summary>
+    /// xml的反序列化
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public static System.Object XmlDeserialize(string path, Type type)
+    {
+        System.Object obj = null;
+        try
+        {
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                XmlSerializer xs = new XmlSerializer(type);
+                obj = xs.Deserialize(fs);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("此xml无法转成二进制: " + path + "," + e);
+        }
+        return obj;
+    }
+
+    /// <summary>
     /// 运行时读取xml，反序列化为类
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -98,7 +122,7 @@ public class BinarySerializeOpt
     /// <param name="path"></param>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public bool BinarySerialize(string path, System.Object obj)
+    public static bool BinarySerialize(string path, System.Object obj)
     {
         try
         {

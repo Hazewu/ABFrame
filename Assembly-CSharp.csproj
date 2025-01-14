@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AssetBundleConfig.xml" />
+    <None Include="Assets\GameData\ConfigData\Xml\MonsterData.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

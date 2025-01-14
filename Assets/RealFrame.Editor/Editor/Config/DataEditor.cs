@@ -1,30 +1,137 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
+using Unity.VisualScripting;
+using System.IO;
 
 public class DataEditor
 {
-    [MenuItem("Assets/Àà×ªxml")]
+    private static string Xml_Path = "Assets/GameData/ConfigData/Xml/";
+    private static string Binary_Path = "Assets/GameData/ConfigData/Binary/";
+    private static string Script_Path = "Assets/Scripts/Data";
+
+
+    [MenuItem("Assets/ç±»è½¬xml")]
     public static void AssetsClassToXml()
     {
-        Object[] objs = Selection.objects;
+        UnityEngine.Object[] objs = Selection.objects;
         int length = objs.Length;
         for (int i = 0; i < length; i++)
         {
-            EditorUtility.DisplayProgressBar("ÎÄ¼ş¼ĞÏÂµÄÀà×ª³Éxml", "ÕıÔÚÉ¨Ãè" + objs[i].name + "......", 1.0f / length * i);
-            SaveClass(objs[i].name);
+            EditorUtility.DisplayProgressBar("æ–‡ä»¶å¤¹ä¸‹çš„ç±»è½¬æˆxml", "æ­£åœ¨æ‰«æ" + objs[i].name + "......", 1.0f / length * i);
+            ClassToXml(objs[i].name);
         }
         AssetDatabase.Refresh();
         EditorUtility.ClearProgressBar();
     }
 
     /// <summary>
-    /// Ìá¹©µ¥¸öÀà×ªxml·½·¨
+    /// æä¾›å•ä¸ªç±»è½¬xmlæ–¹æ³•
     /// </summary>
     /// <param name="name"></param>
-    private static void SaveClass(string name)
+    private static void ClassToXml(string name)
     {
-        // ĞèÒª»ñÈ¡µ±Ç°Ö÷³ÌĞòµÄËùÓĞ³ÌĞò¼¯£¬¸ù¾İnameÕÒµ½¶ÔÓ¦µÄÀà½øĞĞÊµÀı»¯
+        try
+        {
+            // éœ€è¦è·å–å½“å‰ä¸»ç¨‹åºçš„æ‰€æœ‰ç¨‹åºé›†ï¼Œæ ¹æ®nameæ‰¾åˆ°å¯¹åº”çš„ç±»è¿›è¡Œå®ä¾‹åŒ–
+            Type type = null;
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type tempType = asm.GetType(name);
+                if (tempType != null)
+                {
+                    type = tempType;
+                    break;
+                }
+            }
+
+            if (type != null)
+            {
+                var temp = Activator.CreateInstance(type);
+                if (temp is ExcelBase)
+                {
+                    (temp as ExcelBase).Construction();
+                }
+                string xmlPath = Xml_Path + name + ".xml";
+                BinarySerializeOpt.XmlSerialize(xmlPath, temp);
+                Debug.Log(name + "ç±»è½¬xmlæˆåŠŸï¼Œxmlè·¯å¾„ä¸º:" + xmlPath);
+            }
+        }
+        catch
+        {
+            Debug.LogError(name + "ç±»è½¬xmlå¤±è´¥!");
+        }
+    }
+
+    [MenuItem("Assets/Xmlè½¬Binary")]
+    public static void AssetsXmlToBinary()
+    {
+        UnityEngine.Object[] objs = Selection.objects;
+        int length = objs.Length;
+        for (int i = 0; i < length; i++)
+        {
+            EditorUtility.DisplayProgressBar("æ–‡ä»¶ä¸‹çš„xmlè½¬äºŒè¿›åˆ¶", "æ­£åœ¨æ‰«æ" + objs[i].name + "......", 1.0f / length * i);
+            XmlToBinary(objs[i].name);
+        }
+        AssetDatabase.Refresh();
+        EditorUtility.ClearProgressBar();
+    }
+
+    [MenuItem("Tools/Xml/Xmlè½¬äºŒè¿›åˆ¶")]
+    public static void AllXmlToBinary()
+    {
+        string path = Application.dataPath.Replace("Assets", "") + Xml_Path;
+        string[] filesPath = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+        int length = filesPath.Length;
+        for (int i = 0; i < length; i++)
+        {
+            string tempPath = filesPath[i];
+            EditorUtility.DisplayProgressBar("æŸ¥æ‰¾æ–‡ä»¶å¤¹ä¸‹é¢çš„Xml", "æ­£åœ¨æ‰«æ" + tempPath + "......", 1.0f / length * i);
+            if (tempPath.EndsWith(".xml"))
+            {
+                string name = tempPath.Substring(tempPath.LastIndexOf("/") + 1);
+                name = name.Replace(".xml", "");
+                XmlToBinary(name);
+            }
+        }
+        AssetDatabase.Refresh();
+        EditorUtility.ClearProgressBar();
+    }
+
+    /// <summary>
+    /// xmlè½¬äºŒè¿›åˆ¶
+    /// </summary>
+    /// <param name="name"></param>
+    private static void XmlToBinary(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return;
+
+        try
+        {
+            Type type = null;
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type tempType = asm.GetType(name);
+                if (tempType != null)
+                {
+                    type = tempType;
+                    break;
+                }
+            }
+            if (type != null)
+            {
+                string xmlPath = Xml_Path + name + ".xml";
+                string binaryPath = Binary_Path + name + ".bytes";
+                object obj = BinarySerializeOpt.XmlDeserialize(xmlPath, type);
+                BinarySerializeOpt.BinarySerialize(binaryPath, obj);
+                Debug.Log(name + " xmlè½¬äºŒè¿›åˆ¶æˆåŠŸï¼ŒäºŒè¿›åˆ¶è·¯å¾„ä¸ºï¼š" + binaryPath);
+            }
+        }
+        catch
+        {
+            Debug.LogError(name + " xmlè½¬äºŒè¿›åˆ¶å¤±è´¥!");
+        }
     }
 }

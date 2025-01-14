@@ -14,7 +14,7 @@ public class MonsterData : ExcelBase
     public Dictionary<int, MonsterBase> m_AllMonsterDic = new Dictionary<int, MonsterBase>();
 
     /// <summary>
-    /// 编辑器下初始化类转xml？？应该是从xml中读取数据，反序列化
+    /// 编辑器下初始化类转xml
     /// </summary>
     public override void Construction()
     {
