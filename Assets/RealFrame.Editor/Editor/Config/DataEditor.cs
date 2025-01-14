@@ -5,6 +5,7 @@ using UnityEditor;
 using System;
 using Unity.VisualScripting;
 using System.IO;
+using System.Xml;
 
 public class DataEditor
 {
@@ -132,6 +133,59 @@ public class DataEditor
         catch
         {
             Debug.LogError(name + " xml转二进制失败!");
+        }
+    }
+
+
+    [MenuItem("Tools/Xml/测试读取xml")]
+    public static void TextReadXml()
+    {
+        string xmlPath = Application.dataPath + "/../Data/Reg/MonsterData.xml";
+        XmlReader reader = null;
+        try
+        {
+            XmlDocument xml = new XmlDocument();
+            reader = XmlReader.Create(xmlPath);
+            xml.Load(reader);
+
+            XmlNode root = xml.SelectSingleNode("data");
+            XmlElement xe = (XmlElement)root;
+
+            string className = xe.GetAttribute("name");
+            string xmlName = xe.GetAttribute("to");
+            string excelName = xe.GetAttribute("from");
+            reader.Close();
+            Debug.Log(className + " " + xmlName + " " + excelName);
+
+            foreach (XmlNode node in xe.ChildNodes)
+            {
+                // variable层
+                XmlElement tempXe = (XmlElement)node;
+                string name = tempXe.GetAttribute("name");
+                string type = tempXe.GetAttribute("type");
+                Debug.Log(name + " " + type);
+                // list层
+                XmlNode listNode = tempXe.FirstChild;
+                XmlElement listElem = (XmlElement)listNode;
+                string listName = listElem.GetAttribute("name");
+                string sheetName = listElem.GetAttribute("sheetname");
+                string mainkey = listElem.GetAttribute("mainkey");
+                Debug.Log("list:" + listName + " " + sheetName + " " + mainkey);
+                // variable层
+                foreach (XmlNode nd in listElem.ChildNodes)
+                {
+                    XmlElement txe = (XmlElement)nd;
+                    Debug.Log(txe.GetAttribute("name") + " " + txe.GetAttribute("col") + " " + txe.GetAttribute("type"));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            if (reader != null)
+            {
+                reader.Close();
+            }
+            Debug.LogError(e);
         }
     }
 }
