@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
-using Unity.VisualScripting;
 using System.IO;
 using System.Xml;
+using OfficeOpenXml;
+using System.Reflection;
+using System.ComponentModel;
 
 public class DataEditor
 {
@@ -137,7 +139,7 @@ public class DataEditor
     }
 
 
-    [MenuItem("Tools/Xml/测试读取xml")]
+    [MenuItem("Tools/测试/测试读取xml")]
     public static void TextReadXml()
     {
         string xmlPath = Application.dataPath + "/../Data/Reg/MonsterData.xml";
@@ -188,4 +190,249 @@ public class DataEditor
             Debug.LogError(e);
         }
     }
+
+    [MenuItem("Tools/测试/测试写入excel")]
+    public static void TextWriteExcel()
+    {
+        string xlsxPath = Application.dataPath + "/../Data/Excel/G怪物.xlsx";
+        FileInfo xlsxFile = new FileInfo(xlsxPath);
+        if (xlsxFile.Exists)
+        {
+            xlsxFile.Delete();
+            xlsxFile = new FileInfo(xlsxPath);
+        }
+        using (ExcelPackage package = new ExcelPackage(xlsxFile))
+        {
+            ExcelWorksheet workSheet = package.Workbook.Worksheets.Add("怪物配置");
+
+            ExcelRange range = workSheet.Cells[1, 1];
+            range.Value = "测试sssssssssssssssdddd";
+            range.AutoFitColumns();
+            range.Style.WrapText = true;
+
+            package.Save();
+            Debug.Log("写入成功");
+        }
+    }
+
+    [MenuItem("Tools/测试/测试已有类反射为数据")]
+    public static void TestReflection1()
+    {
+        TestInfo testInfo = new TestInfo()
+        {
+            Id = 2,
+            Name = "赠汪伦",
+            IsA = false,
+            AllStrList = new List<string>(),
+            AllTestInfoList = new List<TestInfoTwo>()
+        };
+        testInfo.AllStrList.Add("李白乘舟将欲行");
+        testInfo.AllStrList.Add("忽闻岸上踏歌声");
+        testInfo.AllStrList.Add("桃花潭水深千尺");
+        testInfo.AllStrList.Add("不及汪伦送我情");
+
+        for (int i = 0; i < 3; i++)
+        {
+            TestInfoTwo test = new TestInfoTwo();
+            test.Id = i;
+            test.Name = i + " name";
+            testInfo.AllTestInfoList.Add(test);
+        }
+
+        Debug.LogError("Id:" + GetMemberValue(testInfo, "Id"));
+        Debug.LogError("Name:" + GetMemberValue(testInfo, "Name"));
+        Debug.LogError("IsA:" + GetMemberValue(testInfo, "IsA"));
+
+        // 简单基础类型的list反射
+        object list = GetMemberValue(testInfo, "AllStrList");
+        int listCount = System.Convert.ToInt32(list.GetType().InvokeMember("get_Count", BindingFlags.Default
+            | BindingFlags.InvokeMethod, null, list, new object[] { }));
+        for (int i = 0; i < listCount; i++)
+        {
+            object item = list.GetType().InvokeMember("get_Item", BindingFlags.Default
+                | BindingFlags.InvokeMethod, null, list, new object[] { i });
+            Debug.LogError("list [" + i + "] : " + item);
+        }
+
+        // 自定义类型的list反射
+        object infoList = GetMemberValue(testInfo, "AllTestInfoList");
+        int infoListCount = System.Convert.ToInt32(infoList.GetType().InvokeMember("get_Count", BindingFlags.Default
+            | BindingFlags.InvokeMethod, null, infoList, new object[] { }));
+        for (int i = 0; i < infoListCount; i++)
+        {
+            object item = infoList.GetType().InvokeMember("get_Item", BindingFlags.Default
+                | BindingFlags.InvokeMethod, null, infoList, new object[] { i });
+            object id = GetMemberValue(item, "Id");
+            object name = GetMemberValue(item, "Name");
+            Debug.LogError("list [" + id + "] : " + name);
+        }
+    }
+
+    [MenuItem("Tools/测试/测试已有数据反射为类")]
+    public static void TestRefection2()
+    {
+        object obj = CreateClass("TestInfo");
+
+        SetPropertyValue(obj, "Id", "int", "20");
+        SetPropertyValue(obj, "Name", "string", "静夜诗");
+        SetPropertyValue(obj, "IsA", "bool", "true");
+        SetPropertyValue(obj, "Height", "float", "51.4");
+        SetPropertyValue(obj, "TestType", "enum", "VAR1");
+
+        object list = CreateList(typeof(string));
+        for (int i = 0; i < 3; i++)
+        {
+            object addItem = "测试填数据" + i;
+            list.GetType().InvokeMember("Add", BindingFlags.Default | BindingFlags.InvokeMethod,
+                null, list, new object[] { addItem }); // 调用list的add方法添加数据
+        }
+
+        obj.GetType().GetProperty("AllStrList").SetValue(obj, list);
+
+
+        object twoList = CreateList(typeof(TestInfoTwo));
+        for (int i = 0; i < 3; i++)
+        {
+            object addItem = CreateClass("TestInfoTwo");
+            SetPropertyValue(addItem, "Id", "int", "150" + i);
+            SetPropertyValue(addItem, "Name", "string", "测试类" + i);
+            twoList.GetType().InvokeMember("Add", BindingFlags.Default | BindingFlags.InvokeMethod,
+                null, twoList, new object[] { addItem }); // 调用list的add方法添加数据
+        }
+
+        obj.GetType().GetProperty("AllTestInfoList").SetValue(obj, twoList);
+
+        TestInfo testInfo = obj as TestInfo;
+        Debug.LogError(testInfo.Id + " " + testInfo.Name + " " + testInfo.IsA + " "
+            + testInfo.Height + " " + testInfo.TestType);
+        foreach (string str in testInfo.AllStrList)
+        {
+            Debug.Log(str);
+        }
+        foreach (TestInfoTwo test in testInfo.AllTestInfoList)
+        {
+            Debug.Log(test.Id + " " + test.Name);
+        }
+    }
+    /// <summary>
+    /// 反射类里面的变量的具体数值
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="memberName"></param>
+    /// <returns></returns>
+    private static object GetMemberValue(object obj, string memberName)
+    {
+        Type type = obj.GetType();
+        BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+        MemberInfo[] members = type.GetMember(memberName, flags);
+        switch (members[0].MemberType)
+        {
+            case MemberTypes.Field:
+                return type.GetField(memberName, flags).GetValue(obj);
+            case MemberTypes.Property:
+                return type.GetProperty(memberName, flags).GetValue(obj);
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>
+    /// 根据类名字，反射创建一个类的实列
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    private static object CreateClass(string name)
+    {
+        object obj = null;
+        Type type = null;
+        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            Type tempType = asm.GetType(name);
+            if (tempType != null)
+            {
+                type = tempType;
+                break;
+            }
+        }
+        if (type != null)
+        {
+            obj = Activator.CreateInstance(type);
+        }
+        return obj;
+    }
+
+    /// <summary>
+    /// 根据类型new一个list
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private static object CreateList(Type type)
+    {
+        Type listType = typeof(List<>);
+        // 确定list<>里面的T的类型
+        Type specType = listType.MakeGenericType(new System.Type[] { type });
+        // new出来这个list
+        return Activator.CreateInstance(specType, new object[] { });
+    }
+
+    /// <summary>
+    /// 给对象的某个属性，设置某种类型的值
+    /// </summary>
+    /// <param name="obj">对象</param>
+    /// <param name="propertyName">属性名</param>
+    /// <param name="type">类型</param>
+    /// <param name="value">值</param>
+    private static void SetPropertyValue(object obj, string propertyName, string type, string value)
+    {
+        if (obj == null || string.IsNullOrEmpty(propertyName) || string.IsNullOrEmpty(value)) return;
+
+        PropertyInfo info = obj.GetType().GetProperty(propertyName);
+        object val = null;
+        switch (type)
+        {
+            case "int":
+                val = System.Convert.ToInt32(value);
+                break;
+            case "float":
+                val = System.Convert.ToSingle(value);
+                break;
+            case "bool":
+                val = System.Convert.ToBoolean(val);
+                break;
+            case "enum":
+                val = TypeDescriptor.GetConverter(info.PropertyType).ConvertFromInvariantString(value);
+                break;
+            default:
+                val = value;
+                break;
+        }
+        info.SetValue(obj, val);
+    }
+}
+
+public class TestInfo
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public bool IsA { get; set; }
+
+    public float Height { get; set; }
+
+    public TestEnum TestType { get; set; }
+
+    public List<string> AllStrList { get; set; }
+    public List<TestInfoTwo> AllTestInfoList { get; set; }
+}
+
+public class TestInfoTwo
+{
+    public int Id { get; set; }
+    public string Name { set; get; }
+}
+
+public enum TestEnum
+{
+    None = 0,
+    VAR1 = 1,
+    TEST2 = 2
 }
