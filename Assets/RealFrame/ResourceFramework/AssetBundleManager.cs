@@ -20,6 +20,10 @@ public class AssetBundleManager : Singleton<AssetBundleManager>
     /// <returns></returns>
     public bool LoadAssetBundleConfig()
     {
+        // 感觉这里不该加这个判断TODO
+        if (!ResourceManager.Instance.m_LoadFromAssetBundle)
+            return false;
+
         m_ResourceItemDic.Clear();
 
         string configPath = Application.streamingAssetsPath + "/assetbundleconfig";

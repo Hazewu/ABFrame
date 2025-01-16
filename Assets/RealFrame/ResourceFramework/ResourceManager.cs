@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
     // 辅助取消异步加载的唯一id
     private long m_Guid = 0;
     // 是否从AB包中加载资源
-    private bool m_LoadFromAssetBundle = false;
+    public bool m_LoadFromAssetBundle = false;
     // 缓存引用计数为零的资源列表，游戏资源能快速加载，达到缓存最大的时候释放这个列表里面最早没用的资源
     private CMapList<ResourceItem> m_NoReferenceAssetMapList = new CMapList<ResourceItem>();
     // 缓存使用的资源列表
@@ -135,12 +136,25 @@ public class ResourceManager : Singleton<ResourceManager>
         if (!m_LoadFromAssetBundle)
         {
             item = AssetBundleManager.Instance.FindResourceItem(crc);
-            if (item.m_Obj != null)
+            if (item != null)
             {
-                obj = item.m_Obj as T;
+                if (item.m_Obj != null)
+                {
+                    obj = item.m_Obj as T;
+                }
+                else
+                {
+                    obj = LoadAssetByEditor<T>(path);
+                }
             }
             else
             {
+                // 在编辑器模式下，一般不会执行打AB包操作，因为很耗时，每次运行前都执行不想等那么久
+                if (item == null)
+                {
+                    item = new ResourceItem();
+                    item.m_Crc = crc;
+                }
                 obj = LoadAssetByEditor<T>(path);
             }
         }
@@ -303,12 +317,17 @@ public class ResourceManager : Singleton<ResourceManager>
                 if (!m_LoadFromAssetBundle)
                 {
                     item = AssetBundleManager.Instance.FindResourceItem(loadingParam.m_Crc);
+                    if (item == null)
+                    {
+                        item = new ResourceItem();
+                        item.m_Crc = loadingParam.m_Crc;
+                    }
                     // item.m_obj肯定是空的，因为在之前已经判断过了，没缓存
-                    if (loadingParam.m_IsSprite) 
+                    if (loadingParam.m_IsSprite)
                     {
                         obj = LoadAssetByEditor<Sprite>(loadingParam.m_Path);
                     }
-                    else 
+                    else
                     {
                         obj = LoadAssetByEditor<Object>(loadingParam.m_Path);
                     }
@@ -463,12 +482,26 @@ public class ResourceManager : Singleton<ResourceManager>
         if (!m_LoadFromAssetBundle)
         {
             item = AssetBundleManager.Instance.FindResourceItem(crc);
-            if (item.m_Obj != null)
+            if (item != null)
             {
-                obj = item.m_Obj;
+
+                if (item.m_Obj != null)
+                {
+                    obj = item.m_Obj;
+                }
+                else
+                {
+                    obj = LoadAssetByEditor<Object>(path);
+                }
             }
             else
             {
+                // 在编辑器模式下，一般不会执行打AB包操作，因为很耗时，每次运行前都执行不想等那么久
+                if (item == null)
+                {
+                    item = new ResourceItem();
+                    item.m_Crc = crc;
+                }
                 obj = LoadAssetByEditor<Object>(path);
             }
         }
@@ -544,12 +577,25 @@ public class ResourceManager : Singleton<ResourceManager>
         if (!m_LoadFromAssetBundle)
         {
             item = AssetBundleManager.Instance.FindResourceItem(crc);
-            if (item.m_Obj != null)
+            if (item != null)
             {
-                obj = item.m_Obj;
+                if (item.m_Obj != null)
+                {
+                    obj = item.m_Obj;
+                }
+                else
+                {
+                    obj = LoadAssetByEditor<Object>(path);
+                }
             }
             else
             {
+                // 在编辑器模式下，一般不会执行打AB包操作，因为很耗时，每次运行前都执行不想等那么久
+                if (item == null)
+                {
+                    item = new ResourceItem();
+                    item.m_Crc = crc;
+                }
                 obj = LoadAssetByEditor<Object>(path);
             }
         }

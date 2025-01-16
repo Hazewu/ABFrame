@@ -142,51 +142,19 @@ public class DataEditor
     public static void XmlToExcel()
     {
         string name = "MonsterData";
-        string regPath = Application.dataPath + "/../Data/Reg/" + name + ".xml";
-        if (!File.Exists(regPath))
-        {
-            Debug.LogError("此数据不存在配置变化xml:" + name);
-            return;
-        }
-
-        XmlDocument xml = new XmlDocument();
-        XmlReader reader = XmlReader.Create(regPath);
-        XmlReaderSettings settings = new XmlReaderSettings();
-        // 忽略xml里面的注释
-        settings.IgnoreComments = true;
-        xml.Load(reader);
-
-        // data层
-        XmlNode xn = xml.SelectSingleNode("data");
-        XmlElement xe = (XmlElement)xn;
-        string className = xe.GetAttribute("name");
-        string xmlName = xe.GetAttribute("to");
-        string excelName = xe.GetAttribute("from");
+        string excelName = "";
+        string xmlName = "";
+        string className = "";
 
         // 存储所有变量的表
-        Dictionary<string, SheetClass> allSheetClassDic = new Dictionary<string, SheetClass>();
+        Dictionary<string, SheetClass> allSheetClassDic = ReadReg(name, ref excelName, ref xmlName, ref className);
+        if (allSheetClassDic == null)
+        {
+            return;
+        }
         Dictionary<string, SheetData> sheetDataDic = new Dictionary<string, SheetData>();
-        ReadXmlNode(xe, allSheetClassDic, 0);
-        reader.Close();
 
-
-        object data = null;
-        Type type = null;
-        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
-        {
-            Type tempType = asm.GetType(className);
-            if (tempType != null)
-            {
-                type = tempType;
-                break;
-            }
-        }
-        if (type != null)
-        {
-            // 这里是读的配置数据xml，而不是reg数据xml
-            string xmlPath = Xml_Path + className + ".xml";
-            data = BinarySerializeOpt.XmlDeserialize(xmlPath, type);
-        }
+        object data = GetObjFromXml(className);
 
         List<SheetClass> outSheetList = new List<SheetClass>();
         foreach (SheetClass sheetClass in allSheetClassDic.Values)
@@ -258,6 +226,45 @@ public class DataEditor
             }
             Debug.Log("生成 " + xlsxPath + " 成功!!!");
         }
+    }
+
+    /// <summary>
+    /// 读取reg配置
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="excelName"></param>
+    /// <param name="xmlName"></param>
+    /// <param name="className"></param>
+    /// <returns></returns>
+    private static Dictionary<string, SheetClass> ReadReg(string name, ref string excelName,
+        ref string xmlName, ref string className)
+    {
+        string regPath = Application.dataPath + "/../Data/Reg/" + name + ".xml";
+        if (!File.Exists(regPath))
+        {
+            Debug.LogError("此数据不存在配置变化xml:" + name);
+            return null;
+        }
+
+        XmlDocument xml = new XmlDocument();
+        XmlReader reader = XmlReader.Create(regPath);
+        XmlReaderSettings settings = new XmlReaderSettings();
+        // 忽略xml里面的注释
+        settings.IgnoreComments = true;
+        xml.Load(reader);
+
+        // data层
+        XmlNode xn = xml.SelectSingleNode("data");
+        XmlElement xe = (XmlElement)xn;
+        className = xe.GetAttribute("name");
+        xmlName = xe.GetAttribute("to");
+        excelName = xe.GetAttribute("from");
+
+        // 存储所有变量的表
+        Dictionary<string, SheetClass> allSheetClassDic = new Dictionary<string, SheetClass>();
+        ReadXmlNode(xe, allSheetClassDic, 0);
+        reader.Close();
+        return allSheetClassDic;
     }
 
     /// <summary>
@@ -444,6 +451,33 @@ public class DataEditor
         }
         return result;
     }
+
+    /// <summary>
+    /// 根据xml的名字（不包含后缀）获得obj，要求obj与xml名字相同
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    private static object GetObjFromXml(string name)
+    {
+        Type type = null;
+        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            Type tempType = asm.GetType(name);
+            if (tempType != null)
+            {
+                type = tempType;
+                break;
+            }
+        }
+        if (type != null)
+        {
+            // 这里是读的配置数据xml，而不是reg数据xml
+            string xmlPath = Xml_Path + name + ".xml";
+            return BinarySerializeOpt.XmlDeserialize(xmlPath, type);
+        }
+        return null;
+    }
+
 
     [MenuItem("Tools/测试/测试读取xml")]
     public static void TextReadXml()

@@ -75,5 +75,6 @@ public class ConfigManager : Singleton<ConfigManager>
 /// </summary>
 public class CFG
 {
-
+    public const string TABLE_MONSTER = "Assets/GameData/ConfigData/Binary/MonsterData.bytes";
+    public const string TABLE_BUFF = "Assets/GameData/ConfigData/Binary/BuffData.bytes";
 }

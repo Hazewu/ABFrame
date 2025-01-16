@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BuffData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AllBuffList Id="1" Name="BUFF0" OutLook="Assets/GameData/...0" Time="6.015345" BuffType="Fire" />
+  <AllBuffList Id="2" Name="BUFF1" OutLook="Assets/GameData/...1" Time="8.170897" BuffType="Node" />
+  <AllBuffList Id="3" Name="BUFF2" OutLook="Assets/GameData/...2" Time="2.00877213" BuffType="Ice" />
+  <AllBuffList Id="4" Name="BUFF3" OutLook="Assets/GameData/...3" Time="1.76402223" BuffType="Fire" />
+  <AllBuffList Id="5" Name="BUFF4" OutLook="Assets/GameData/...4" Time="2.91295242" BuffType="Fire" />
+  <AllBuffList Id="6" Name="BUFF5" OutLook="Assets/GameData/...5" Time="1.35388935" BuffType="Poison" />
+  <AllBuffList Id="7" Name="BUFF6" OutLook="Assets/GameData/...6" Time="5.876361" BuffType="Fire" />
+  <AllBuffList Id="8" Name="BUFF7" OutLook="Assets/GameData/...7" Time="9.647155" BuffType="Poison" />
+  <AllBuffList Id="9" Name="BUFF8" OutLook="Assets/GameData/...8" Time="1.746745" BuffType="Node" />
+  <AllBuffList Id="10" Name="BUFF9" OutLook="Assets/GameData/...9" Time="3.62835431" BuffType="Node" />
+  <MonsterBuffList Id="1" Name="怪物BUFF0" OutLook="Assets/GameData/Monster/...0" Time="9.207393" BuffType="Poison" />
+  <MonsterBuffList Id="2" Name="怪物BUFF1" OutLook="Assets/GameData/Monster/...1" Time="5.6522646" BuffType="Ice" />
+  <MonsterBuffList Id="3" Name="怪物BUFF2" OutLook="Assets/GameData/Monster/...2" Time="8.173395" BuffType="Node" />
+  <MonsterBuffList Id="4" Name="怪物BUFF3" OutLook="Assets/GameData/Monster/...3" Time="7.68507528" BuffType="Fire" />
+  <MonsterBuffList Id="5" Name="怪物BUFF4" OutLook="Assets/GameData/Monster/...4" Time="7.88285637" BuffType="Node" />
+</BuffData>

@@ -37,7 +37,8 @@ public class GameStart : MonoSingleton<GameStart>
 
     private void LoadConfig()
     {
-
+        ConfigManager.Instance.LoadData<MonsterData>(CFG.TABLE_MONSTER);
+        ConfigManager.Instance.LoadData<BuffData>(CFG.TABLE_BUFF);
     }
 
     private void RegisterUI()

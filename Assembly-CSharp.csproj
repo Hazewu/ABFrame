@@ -69,10 +69,12 @@
     <Compile Include="Assets\Scripts\UGUI\Panel\LoadingPanel.cs" />
     <Compile Include="Assets\RealFrame\ConfigFramework\ExcelBase.cs" />
     <Compile Include="Assets\Scripts\Game\GameStart.cs" />
+    <Compile Include="Assets\Scripts\Data\BuffData.cs" />
     <Compile Include="Assets\Scripts\UGUI\Window\LoadingUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AssetBundleConfig.xml" />
+    <None Include="Assets\GameData\ConfigData\Xml\BuffData.xml" />
     <None Include="Assets\GameData\ConfigData\Xml\MonsterData.xml" />
   </ItemGroup>
   <ItemGroup>
