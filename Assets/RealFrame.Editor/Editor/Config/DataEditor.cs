@@ -8,6 +8,7 @@ using System.Xml;
 using OfficeOpenXml;
 using System.Reflection;
 using System.ComponentModel;
+using Packages.Rider.Editor.Debugger;
 
 public class DataEditor
 {
@@ -101,6 +102,26 @@ public class DataEditor
                 XmlToBinary(name);
             }
         }
+        AssetDatabase.Refresh();
+        EditorUtility.ClearProgressBar();
+    }
+
+    [MenuItem("Tools/Xml/Excel转xml")]
+    public static void AllExcelToXml()
+    {
+        string[] filePaths = Directory.GetFiles(Reg_Path, "*", SearchOption.AllDirectories);
+        int length = filePaths.Length;
+        for (int i = 0; i < length; i++)
+        {
+            string path = filePaths[i];
+            if (!path.EndsWith(".xml"))
+                continue;
+            EditorUtility.DisplayProgressBar("查找文件夹下的类", "正在扫描路径" + path + "......",
+                1.0f / length * i);
+            string name = path.Substring(path.LastIndexOf("/") + 1);
+            ExcelToXml(name.Replace(".xml", ""));
+        }
+
         AssetDatabase.Refresh();
         EditorUtility.ClearProgressBar();
     }
@@ -251,11 +272,8 @@ public class DataEditor
         }
     }
 
-
-    [MenuItem("Tools/测试/Excel转xml")]
-    public static void ExcelToXml()
+    private static void ExcelToXml(string name)
     {
-        string name = "MonsterData";
         string className = "";
         string xmlName = "";
         string excelName = "";
@@ -354,10 +372,20 @@ public class DataEditor
             for (int j = 0; j < sheetClass.VarList.Count; j++)
             {
                 VarClass varClass = sheetClass.VarList[j];
-                if (varClass.Type == "list")
+                if (varClass.Type == "list" && string.IsNullOrEmpty(varClass.SplitStr))
                 {
                     ReadDataToClass(addItem, allSheetClassDic[varClass.ListName], sheetDataDic[varClass.ListName],
                         allSheetClassDic, sheetDataDic);
+                }
+                else if (varClass.Type == "list")
+                {
+                    string value = sheetData.AllData[i].RowDataDic[sheetData.AllNames[j]];
+                    SetSplitClassList(addItem, allSheetClassDic[varClass.ListSheetName], value);
+                }
+                else if (varClass.Type == "listStr")
+                {
+                    string value = sheetData.AllData[i].RowDataDic[sheetData.AllNames[j]];
+                    SetSplitBaseList(addItem, varClass, value);
                 }
                 else
                 {
@@ -378,6 +406,64 @@ public class DataEditor
                 null, list, new object[] { addItem });
         }
         objClass.GetType().GetProperty(sheetClass.ParentVar.Name).SetValue(objClass, list);
+    }
+
+    /// <summary>
+    /// 自定义类list赋值
+    /// </summary>
+    /// <param name="objClass"></param>
+    /// <param name="sheetClass"></param>
+    /// <param name="value"></param>
+    private static void SetSplitClassList(object objClass, SheetClass sheetClass, string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            Debug.Log("excel里面自定义list的列有空值!" + sheetClass.Name);
+            return;
+        }
+        object item = CreateClass(sheetClass.Name);
+        object list = CreateList(item.GetType());
+
+        string splitStr = sheetClass.ParentVar.SplitStr;
+        splitStr = splitStr.Replace("\\n", "\n").Replace("\\r", "\r");
+        string[] rowArray = value.Split(new string[] { splitStr }, StringSplitOptions.None);
+        for (int i = 0; i < rowArray.Length; i++)
+        {
+            object addItem = CreateClass(sheetClass.Name);
+            string[] valueList = rowArray[i].Trim().Split(new string[] { sheetClass.SplitStr }, StringSplitOptions.None);
+            for (int j = 0; j < valueList.Length; j++)
+            {
+                SetPropertyValue(addItem, sheetClass.VarList[j].Name, sheetClass.VarList[j].Type, valueList[j]);
+            }
+            list.GetType().InvokeMember("Add", BindingFlags.Default | BindingFlags.InvokeMethod,
+                null, list, new object[] { addItem });
+        }
+        objClass.GetType().GetProperty(sheetClass.ParentVar.Name).SetValue(objClass, list);
+    }
+
+    private static void SetSplitBaseList(object objClass, VarClass varClass, string value)
+    {
+        Type type = null;
+        if (varClass.Type == "listStr")
+        {
+            type = typeof(string);
+        }
+        object list = CreateList(type);
+        string[] rowArray = value.Split(new string[] { varClass.SplitStr }, StringSplitOptions.None);
+        for (int i = 0; i < rowArray.Length; i++)
+        {
+            object addItem = rowArray[i];
+            try
+            {
+                list.GetType().InvokeMember("Add", BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, list, new object[] { addItem });
+            }
+            catch
+            {
+                Debug.LogError(varClass.ListSheetName + " 里 " + varClass.Name + " 列表添加失败！具体数值是：" + addItem);
+            }
+        }
+        objClass.GetType().GetProperty(varClass.Name).SetValue(objClass, list);
     }
 
     /// <summary>
@@ -562,7 +648,6 @@ public class DataEditor
                 {
                     SheetClass tempSheetClass = allSheetClassDic[colVar.ListSheetName];
                     string value = GetSplitClassList(item, colVar, tempSheetClass);
-                    Debug.LogError("special list:" + colVar.Name + " value:" + value);
                     rowData.RowDataDic.Add(colVar.Col, value);
                 }
                 // list+基础类型
@@ -721,7 +806,6 @@ public class DataEditor
             for (int j = 0; j < sheetClass.VarList.Count; j++)
             {
                 object value = GetMemberValue(item, sheetClass.VarList[j].Name);
-                Debug.LogWarning("name:" + sheetClass.VarList[j].Name + " value:" + value);
                 str += value.ToString();
                 if (j != sheetClass.VarList.Count - 1)
                 {
