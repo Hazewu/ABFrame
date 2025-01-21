@@ -7,7 +7,7 @@ using System.IO;
 
 public class BuildApp
 {
-    private static string m_AppName = "RealFrame";
+    private static string m_AppName = PlayerSettings.productName;
     private static string m_AndroidPath = Application.dataPath + "/../BuildTarget/Android/";
     private static string m_MacOSPath = Application.dataPath + "/../BuildTarget/MacOS/";
     private static string m_WindowsPath = Application.dataPath + "/../BuildTarget/Windows/";

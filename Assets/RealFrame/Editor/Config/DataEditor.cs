@@ -8,13 +8,12 @@ using System.Xml;
 using OfficeOpenXml;
 using System.Reflection;
 using System.ComponentModel;
-using Packages.Rider.Editor.Debugger;
 
 public class DataEditor
 {
-    private static string Xml_Path = "Assets/GameData/ConfigData/Xml/";
-    private static string Binary_Path = "Assets/GameData/ConfigData/Binary/";
-    private static string Script_Path = "Assets/Scripts/Data";
+    private static string Xml_Path = RealConfig.GetConfig().m_XmlPath;
+    private static string Binary_Path = RealConfig.GetConfig().m_BinaryPath;
+    private static string Script_Path = RealConfig.GetConfig().m_ScriptsPath;
     private static string Excel_Path = Application.dataPath + "/../Data/Excel/";
     private static string Reg_Path = Application.dataPath + "/../Data/Reg/";
 

@@ -56,22 +56,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="F:\unityWorkspace\ABFrame\Assets\RealFrame\Frame\Plugins\Editor\EPPlus.dll" />
     <Analyzer Include="F:\UnityHub\2022.3.52f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="F:\UnityHub\2022.3.52f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\RealFrame\ResourceFramework\OfflineData\EffectOfflineData.cs" />
-    <Compile Include="Assets\RealFrame\ResourceFramework\ObjectManager.cs" />
-    <Compile Include="Assets\RealFrame\ResourceFramework\ClassObjectPool.cs" />
-    <Compile Include="Assets\RealFrame\ResourceFramework\AssetBundleManager.cs" />
-    <Compile Include="Assets\RealFrame\ResourceFramework\ResourceManager.cs" />
-    <Compile Include="Assets\RealFrame\ResourceFramework\CRC32.cs" />
-    <Compile Include="Assets\RealFrame\ResourceFramework\AssetBundleConfig.cs" />
-    <Compile Include="Assets\RealFrame\ResourceFramework\OfflineData\OfflineData.cs" />
-    <Compile Include="Assets\RealFrame\ResourceFramework\OfflineData\UIOfflineData.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\AssetBundleManager.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\AssetBundleConfig.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\CRC32.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\OfflineData\UIOfflineData.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\OfflineData\OfflineData.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\OfflineData\EffectOfflineData.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\ObjectManager.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\ClassObjectPool.cs" />
+    <Compile Include="Assets\RealFrame\Frame\ResourceFrame\ResourceManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\RealFrame\ResourceFramework\Resource.asmdef" />
+    <None Include="Assets\RealFrame\Frame\ResourceFrame\Resource.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -443,7 +444,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="EPPlus">
-      <HintPath>Assets\Plugins\Editor\EPPlus.dll</HintPath>
+      <HintPath>Assets\RealFrame\Frame\Plugins\Editor\EPPlus.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">

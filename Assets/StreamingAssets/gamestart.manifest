@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3825960696
+CRC: 87093626
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1be898ea7b55b4c0e4db2d4ac9f243c7
+    Hash: 19fd075673a39de73c3613a510a5680e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 40b854323b6266bfb55503c7a27934ab
+    Hash: 9cc8f48c4681a71b23647b17262e2986
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1be898ea7b55b4c0e4db2d4ac9f243c7
+    Hash: 19fd075673a39de73c3613a510a5680e
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -21,15 +21,15 @@ ClassTypes:
 - Class: 81
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  Script: {fileID: 11500000, guid: 94cc5c03db16c42c5892787dd76ca665, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 94cc5c03db16c42c5892787dd76ca665, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 223
@@ -38,5 +38,5 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/GameResources/Prefabs/GameStart.prefab
+- Assets/RealFrame/Frame/GameStart.prefab
 Dependencies: []

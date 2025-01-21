@@ -13,6 +13,7 @@ public class MonsterData : ExcelBase
     [XmlIgnore]
     public Dictionary<int, MonsterBase> m_AllMonsterDic = new Dictionary<int, MonsterBase>();
 
+#if UNITY_EDITOR
     /// <summary>
     /// 编辑器下初始化类转xml
     /// </summary>
@@ -31,6 +32,7 @@ public class MonsterData : ExcelBase
             AllMonster.Add(monster);
         }
     }
+#endif
 
     public override void Init()
     {

@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <AssetBundleConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ABList Path="Assets/GameData/ABData/AssetBundleConfig.bytes" Crc="3450061465" ABName="assetbundleconfig" AssetName="AssetBundleConfig.bytes" />
+  <ABList Path="Assets/GameData/ConfigData/Binary/BuffData.bytes" Crc="1527845340" ABName="bytes" AssetName="BuffData.bytes" />
+  <ABList Path="Assets/GameData/ConfigData/Binary/MonsterData.bytes" Crc="1511757326" ABName="bytes" AssetName="MonsterData.bytes" />
   <ABList Path="Assets/GameResources/Prefabs/Door.prefab" Crc="562265818" ABName="door" AssetName="Door.prefab">
     <ABDepends>ui</ABDepends>
   </ABList>
-  <ABList Path="Assets/GameResources/Prefabs/GameStart.prefab" Crc="2614082371" ABName="gamestart" AssetName="GameStart.prefab" />
   <ABList Path="Assets/GameResources/Prefabs/Left.prefab" Crc="3953949004" ABName="left" AssetName="Left.prefab">
     <ABDepends>ui</ABDepends>
   </ABList>

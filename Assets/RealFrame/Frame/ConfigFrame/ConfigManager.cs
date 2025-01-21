@@ -66,7 +66,7 @@ public class ConfigManager : Singleton<ConfigManager>
             excelBase = LoadData<T>(path);
         }
 
-        return null;
+        return (T)excelBase;
     }
 }
 

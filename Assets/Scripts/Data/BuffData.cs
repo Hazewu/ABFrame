@@ -17,6 +17,7 @@ public class BuffData : ExcelBase
     [XmlIgnore]
     public Dictionary<int, BuffBase> MonsterBuffDic = new Dictionary<int, BuffBase>();
 
+#if UNITY_EDITOR
     public override void Construction()
     {
         AllBuffList = new List<BuffBase>();
@@ -67,7 +68,7 @@ public class BuffData : ExcelBase
             MonsterBuffList.Add(buff);
         }
     }
-
+#endif
     public override void Init()
     {
         AllBuffDic.Clear();

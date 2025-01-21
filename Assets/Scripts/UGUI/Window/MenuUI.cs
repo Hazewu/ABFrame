@@ -54,16 +54,14 @@ public class MenuUI : HaWindow
         }
     }
 
-    //public override void OnUpdate()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.A) && m_Clip != null)
-    //    {
-    //        Debug.Log("AAAAAAAAAAA");
-    //        ResourceManager.Instance.ReleaseResource(m_Clip, true);
-    //        m_MainPanel.m_AudioSource.clip = null;
-    //        m_Clip = null;
-    //    }
-    //}
+    public override void OnUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            ResourceManager.Instance.ReleaseResource(m_MainPanel.m_Img1.sprite, true);
+            m_MainPanel.m_Img1.sprite = null;
+        }
+    }
 
     private void OnStartBtnClicked()
     {

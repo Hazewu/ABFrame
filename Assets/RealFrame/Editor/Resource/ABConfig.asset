@@ -21,3 +21,5 @@ MonoBehaviour:
     Path: Assets/GameResources/Audioclips
   - ABName: assetbundleconfig
     Path: Assets/GameData/ABData
+  - ABName: bytes
+    Path: Assets/GameData/ConfigData/Binary

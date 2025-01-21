@@ -9,8 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 public class BundleEditor
 {
     private static string m_BundleTargetPath = Application.dataPath + "/../AssetBundle/" + EditorUserBuildSettings.activeBuildTarget.ToString();
-    private static string ABCONFIGPATH = "Assets/RealFrame.Editor/Editor/Resource/ABConfig.asset";
-    private static string ABBYTEPATH = "Assets/GameData/ABData/AssetBundleConfig.bytes";
+    private static string ABCONFIGPATH = "Assets/RealFrame/Editor/Resource/ABConfig.asset";
 
     // key是ab包名，value是路径，所有文件夹ab包dic
     private static Dictionary<string, string> m_AllFileDir = new Dictionary<string, string>();
@@ -54,7 +53,7 @@ public class BundleEditor
         for (int i = 0; i < length; i++)
         {
             string path = AssetDatabase.GUIDToAssetPath(allStr[i]);
-            Debug.LogError(path);
+            // Debug.LogError(path);
             EditorUtility.DisplayProgressBar("查找Prefab", "Prefab:" + path, i * 1.0f / length);
             m_ConfigFile.Add(path);
             if (!ContainAllFileAB(path))
@@ -65,7 +64,7 @@ public class BundleEditor
                 for (int j = 0; j < allDepends.Length; j++)
                 {
                     string tempPath = allDepends[j];
-                    Debug.Log(tempPath);
+                    //Debug.Log(tempPath);
                     if (!ContainAllFileAB(tempPath) && !tempPath.EndsWith(".cs"))
                     {
                         m_AllFileAB.Add(tempPath);
@@ -173,12 +172,8 @@ public class BundleEditor
                 if (tempPath.EndsWith(".cs"))
                     continue;
 
-                //Debug.Log("此AB包：" + name + " 下面包含的资源文件路径：" + tempPath);
-                // TODO，怎么感觉用反了？仔细想想
-                if (ValidPath(tempPath))
-                {
-                    resPathDic.Add(tempPath, name);
-                }
+                Debug.Log("此AB包：" + name + " 下面包含的资源文件路径：" + tempPath);
+                resPathDic.Add(tempPath, name);
             }
         }
 
@@ -241,6 +236,10 @@ public class BundleEditor
                 {
                     File.Delete(files[i].FullName);
                 }
+                if (File.Exists(files[i].FullName + ".manifest"))
+                {
+                    File.Delete(files[i].FullName + ".manifest");
+                }
             }
         }
     }
@@ -251,6 +250,8 @@ public class BundleEditor
         config.ABList = new List<ABBase>();
         foreach (string path in resPathDic.Keys)
         {
+            if (!ValidPath(path)) continue;
+
             ABBase abBase = new ABBase();
             abBase.Path = path;
             abBase.Crc = CRC32.GetCRC32(path);
@@ -295,7 +296,7 @@ public class BundleEditor
             // 二进制中不需要实际的路径，用crc就行了
             ab.Path = "";
         }
-        string bytePath = ABBYTEPATH;
+        string bytePath = RealConfig.GetConfig().m_ABBytePath;
         if (File.Exists(bytePath)) File.Delete(bytePath);
         FileStream binaryFs = new FileStream(bytePath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
         binaryFs.Seek(0, SeekOrigin.Begin);

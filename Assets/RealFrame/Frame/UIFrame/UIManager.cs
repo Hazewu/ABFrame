@@ -24,7 +24,7 @@ public class UIManager : Singleton<UIManager>
     private float m_CanvasRate = 0;
 
     // UI的窗口路径
-    private const string UI_PREFAB_PATH = "Assets/GameResources/Prefabs/UGUI/Panel/";
+    private string m_UI_PREFAB_PATH = "Assets/GameResources/Prefabs/UGUI/Panel/";
     // 注册的窗口
     private Dictionary<string, System.Type> m_RegisterDic = new Dictionary<string, System.Type>();
     // 所有打开的窗口
@@ -46,6 +46,15 @@ public class UIManager : Singleton<UIManager>
         m_UICamera = uiCamera;
         m_EventSystem = eventSystem;
         m_CanvasRate = Screen.height / (m_UICamera.orthographicSize * 2);
+    }
+
+    /// <summary>
+    /// 设置所有界面UI路径
+    /// </summary>
+    /// <param name="path"></param>
+    public void SetUIPrefabPath(string path)
+    {
+        m_UI_PREFAB_PATH = path;
     }
 
     /// <summary>
@@ -120,7 +129,7 @@ public class UIManager : Singleton<UIManager>
                 return null;
             }
 
-            GameObject wndObj = ObjectManager.Instance.InstantiateObject(UI_PREFAB_PATH + wndName, false, false);
+            GameObject wndObj = ObjectManager.Instance.InstantiateObject(m_UI_PREFAB_PATH + wndName, false, false);
             if (wndObj == null)
             {
                 Debug.LogError("创建窗口Prefab失败：" + wndName);

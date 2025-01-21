@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
