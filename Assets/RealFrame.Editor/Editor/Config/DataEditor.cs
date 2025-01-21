@@ -355,6 +355,7 @@ public class DataEditor
 
         // 序列化
         BinarySerializeOpt.XmlSerialize(Xml_Path + xmlName, objClass);
+        //BinarySerializeOpt.BinarySerialize(Binary_Path + className + ".byte", objClass);
         Debug.Log(excelName + "表导入unity完成!");
         AssetDatabase.Refresh();
     }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +20,18 @@ public class MenuUI : HaWindow
 
         ResourceManager.Instance.AsyncLoadResource("Assets/GameResources/UI/Escape.png", OnLoadSpriteTest1, LoadResPriority.RES_LOW, true);
         ResourceManager.Instance.AsyncLoadResource("Assets/GameResources/UI/Head.png", OnLoadSpriteTest2, LoadResPriority.RES_HIGH, true);
+        LoadMonsterData();
+    }
+
+    private void LoadMonsterData()
+    {
+        MonsterData monsterData = ConfigManager.Instance.FindData<MonsterData>(CFG.TABLE_MONSTER);
+        foreach (MonsterBase data in monsterData.AllMonster)
+        {
+
+            Debug.Log(string.Format("ID:{0} åå­—: {1} å¤–è§‚: {2} é«˜åº¦: {3} ç¨€æœ‰åº¦: {4}", data.Id,
+                data.Name, data.OutLook, data.Height, data.Rare));
+        }
     }
 
     private void OnLoadSpriteTest1(string path, Object obj, object param1 = null, object param2 = null, object param3 = null)
@@ -28,7 +40,7 @@ public class MenuUI : HaWindow
         {
             Sprite sp = obj as Sprite;
             m_MainPanel.m_Img1.sprite = sp;
-            Debug.Log("Í¼Æ¬1¼ÓÔØ³öÀ´ÁË");
+            Debug.Log("å›¾ç‰‡1åŠ è½½å‡ºæ¥äº†");
         }
     }
 
@@ -38,7 +50,7 @@ public class MenuUI : HaWindow
         {
             Sprite sp = obj as Sprite;
             m_MainPanel.m_Img2.sprite = sp;
-            Debug.Log("Í¼Æ¬2¼ÓÔØ³öÀ´ÁË");
+            Debug.Log("å›¾ç‰‡2åŠ è½½å‡ºæ¥äº†");
         }
     }
 
@@ -55,16 +67,16 @@ public class MenuUI : HaWindow
 
     private void OnStartBtnClicked()
     {
-        Debug.Log("µã»÷ÁË¿ªÊ¼ÓÎÏ·£¡");
+        Debug.Log("ç‚¹å‡»äº†å¼€å§‹æ¸¸æˆï¼");
     }
 
     private void OnLoadBtnClicked()
     {
-        Debug.Log("µã»÷ÁË¼ÓÔØÓÎÏ·£¡");
+        Debug.Log("ç‚¹å‡»äº†åŠ è½½æ¸¸æˆï¼");
     }
 
     private void OnExitBtnClicked()
     {
-        Debug.Log("µã»÷ÁËÍË³öÓÎÏ·£¡");
+        Debug.Log("ç‚¹å‡»äº†é€€å‡ºæ¸¸æˆï¼");
     }
 }

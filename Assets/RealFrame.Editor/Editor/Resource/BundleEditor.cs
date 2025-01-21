@@ -24,6 +24,8 @@ public class BundleEditor
     [MenuItem("Tools/打AB包")]
     public static void Build()
     {
+        DataEditor.AllXmlToBinary();
+
         m_AllFileDir.Clear();
         m_AllFileAB.Clear();
         m_AllPrefabDir.Clear();
