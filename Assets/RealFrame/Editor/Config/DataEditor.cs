@@ -271,6 +271,136 @@ public class DataEditor
         }
     }
 
+    [MenuItem("Tools/测试/Excel转xml")]
+    public static void ExcelToXmlNew()
+    {
+        string excelName = "Poetry_古诗";
+        string excelPath = Excel_Path + "Poetry_古诗.xlsx";
+        string className = "Poetry";
+        string xmlName = "Poetry.xml";
+        // 第一步，打开excel
+        // 第二步，读取1234行数据，获取字段属性
+        // 第三步，读取数据
+        HaSheetData sheetData = ReadExcelData(excelPath);
+        if (sheetData == null)
+        {
+            return;
+        }
+
+        // 第四步，根据类的结构，创建类，并且给每个变量赋值
+        object objClass = CreateClass(className);
+        string dataBaseName = className + "Base";
+        string dataListName = className + "List";
+        ReadDataToClass(objClass, sheetData);
+
+
+        //// 第五步，序列化
+        //BinarySerializeOpt.XmlSerialize(Xml_Path + xmlName, objClass);
+        //Debug.Log(excelName + "表导入完成！");
+    }
+
+    /// <summary>
+    /// 在Excel中读取所有需要的数据
+    /// </summary>
+    /// <param name="excelPath"></param>
+    /// <returns></returns>
+    private static HaSheetData ReadExcelData(string excelPath)
+    {
+        try
+        {
+            using (FileStream fs = new FileStream(excelPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                // 注意excel中索引从1开始
+                using (ExcelPackage package = new ExcelPackage(fs))
+                {
+                    // 只读取第一个表的数据
+                    HaSheetData sheetData = new HaSheetData();
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                    int colCount = worksheet.Dimension.End.Column;
+                    int rowCount = worksheet.Dimension.End.Row;
+                    if (rowCount < 5)
+                    {
+                        Debug.LogWarning(excelPath + "表中数据不足5行，没有数据导出失败！");
+                        return null;
+                    }
+
+                    // 读取列属性，前4行
+                    for (int col = 1; col < colCount + 1; col++)
+                    {
+                        ExcelRange typeRange = worksheet.Cells[1, col];
+                        ExcelRange nameRange = worksheet.Cells[2, col];
+                        string name = nameRange.Value.ToString().Trim();
+                        string type = typeRange.Value.ToString().Trim();
+                        bool isArray = false;
+                        if (type.Contains("[]"))
+                        {
+                            isArray = true;
+                            type = type.Replace("[]", "");
+                        }
+                        HaColProperty property = new HaColProperty()
+                        {
+                            Name = name,
+                            Type = type,
+                            IsArray = isArray,
+                        };
+                        sheetData.AllCols.Add(property);
+                        Debug.Log("name:" + property.Name + " type:" + property.Type + " isArray:" + property.IsArray);
+                    }
+
+                    // 读取数据，从第5行开始
+                    for (int row = 5; row < rowCount + 1; row++)
+                    {
+                        HaRowData rowData = new HaRowData();
+                        bool isValidData = true;
+                        for (int col = 1; col < colCount + 1; col++)
+                        {
+                            ExcelRange range = worksheet.Cells[row, col];
+                            string value = "";
+                            if (range.Value != null)
+                            {
+                                value = range.Value.ToString().Trim();
+                            }
+                            // 第一列中的数据为空，不读取该行数据
+                            if (col == 1 && string.IsNullOrEmpty(value))
+                            {
+                                isValidData = false;
+                                break;
+                            }
+
+                            string colName = worksheet.Cells[2, col].Value.ToString().Trim();
+                            rowData.DataDic.Add(colName, value);
+                        }
+                        if (isValidData)
+                        {
+                            sheetData.AllData.Add(rowData);
+                        }
+                    }
+
+                    for (int i = 0; i < sheetData.AllData.Count; i++)
+                    {
+                        string str = i + ":";
+                        foreach (string key in sheetData.AllData[i].DataDic.Keys)
+                        {
+                            str += key + ":" + sheetData.AllData[i].DataDic[key] + "   ";
+                        }
+                        Debug.Log(str);
+                    }
+                    return sheetData;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(excelPath + "导表失败！原因：" + e);
+            return null;
+        }
+    }
+
+    private static void ReadDataToClass(object objClass, HaSheetData sheetData)
+    {
+
+    }
+
     private static void ExcelToXml(string name)
     {
         string className = "";
@@ -1182,4 +1312,37 @@ public class RowData
 {
     // key=列名，value=数据
     public Dictionary<string, string> RowDataDic = new Dictionary<string, string>();
+}
+
+/// <summary>
+/// 表中的数据
+/// </summary>
+public class HaSheetData
+{
+    // 所有列属性（读取1234行获得），key=列属性名
+    public List<HaColProperty> AllCols = new List<HaColProperty>();
+    // 所有行数据（除了1234行）
+    public List<HaRowData> AllData = new List<HaRowData>();
+}
+
+/// <summary>
+/// 列属性，对应类中的每个属性
+/// </summary>
+public class HaColProperty
+{
+    // 属性名
+    public string Name { get; set; }
+    // 类型【int、string、bool、float、enum】
+    public string Type { get; set; }
+    // 是否是数组
+    public bool IsArray { get; set; }
+}
+
+/// <summary>
+/// 存储每一行中的数据
+/// </summary>
+public class HaRowData
+{
+    // key=属性名，value=数据
+    public Dictionary<string, string> DataDic = new Dictionary<string, string>();
 }
