@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AssetBundleConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ABList Path="Assets/GameData/ABData/AssetBundleConfig.bytes" Crc="3450061465" ABName="assetbundleconfig" AssetName="AssetBundleConfig.bytes" />
+  <ABList Path="Assets/GameData/ConfigData/Binary/BuffData.bytes" Crc="1527845340" ABName="bytes" AssetName="BuffData.bytes" />
+  <ABList Path="Assets/GameData/ConfigData/Binary/MonsterData.bytes" Crc="1511757326" ABName="bytes" AssetName="MonsterData.bytes" />
+  <ABList Path="Assets/GameResources/Prefabs/Door.prefab" Crc="562265818" ABName="door" AssetName="Door.prefab">
+    <ABDepends>ui</ABDepends>
+  </ABList>
+  <ABList Path="Assets/GameResources/Prefabs/Left.prefab" Crc="3953949004" ABName="left" AssetName="Left.prefab">
+    <ABDepends>ui</ABDepends>
+  </ABList>
+  <ABList Path="Assets/GameResources/Prefabs/UGUI/Panel/LoadingPanel.prefab" Crc="387264661" ABName="loadingpanel" AssetName="LoadingPanel.prefab" />
+  <ABList Path="Assets/GameResources/Prefabs/UGUI/Panel/MenuPanel.prefab" Crc="3730736878" ABName="menupanel" AssetName="MenuPanel.prefab" />
+  <ABList Path="Assets/GameResources/Prefabs/Right.prefab" Crc="4056264703" ABName="right" AssetName="Right.prefab">
+    <ABDepends>ui</ABDepends>
+  </ABList>
+  <ABList Path="Assets/GameResources/Audioclips/AttackSound.mp3" Crc="2786147098" ABName="sound" AssetName="AttackSound.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/Battle.mp3" Crc="2508818099" ABName="sound" AssetName="Battle.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/Dog.mp3" Crc="3266803558" ABName="sound" AssetName="Dog.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/FinishTask.mp3" Crc="3042815552" ABName="sound" AssetName="FinishTask.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/Footstep-low.wav" Crc="3174281466" ABName="sound" AssetName="Footstep-low.wav" />
+  <ABList Path="Assets/GameResources/Audioclips/LunaAttack.mp3" Crc="2558196876" ABName="sound" AssetName="LunaAttack.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/LunaDie.mp3" Crc="942558315" ABName="sound" AssetName="LunaDie.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/LunaHit.mp3" Crc="491986530" ABName="sound" AssetName="LunaHit.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/MonsterAttack.wav" Crc="3457824726" ABName="sound" AssetName="MonsterAttack.wav" />
+  <ABList Path="Assets/GameResources/Audioclips/MonsterHit.wav" Crc="3042892773" ABName="sound" AssetName="MonsterHit.wav" />
+  <ABList Path="Assets/GameResources/Audioclips/Normal.mp3" Crc="3259586145" ABName="sound" AssetName="Normal.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/RecoverHPSound.mp3" Crc="3998275340" ABName="sound" AssetName="RecoverHPSound.mp3" />
+  <ABList Path="Assets/GameResources/Audioclips/SkillSound.mp3" Crc="1514593682" ABName="sound" AssetName="SkillSound.mp3" />
+  <ABList Path="Assets/GameResources/UI/_DF_TitleScreen.png" Crc="2240795275" ABName="ui" AssetName="_DF_TitleScreen.png" />
+  <ABList Path="Assets/GameResources/UI/AttackIcon.png" Crc="2519045967" ABName="ui" AssetName="AttackIcon.png" />
+  <ABList Path="Assets/GameResources/UI/ColorCard.png" Crc="3929692374" ABName="ui" AssetName="ColorCard.png" />
+  <ABList Path="Assets/GameResources/UI/Defend.png" Crc="306052796" ABName="ui" AssetName="Defend.png" />
+  <ABList Path="Assets/GameResources/UI/Escape.png" Crc="3376448112" ABName="ui" AssetName="Escape.png" />
+  <ABList Path="Assets/GameResources/UI/Grid.png" Crc="2654418100" ABName="ui" AssetName="Grid.png" />
+  <ABList Path="Assets/GameResources/UI/Head.png" Crc="803060811" ABName="ui" AssetName="Head.png" />
+  <ABList Path="Assets/GameResources/UI/HeadGrid.png" Crc="2472419809" ABName="ui" AssetName="HeadGrid.png" />
+  <ABList Path="Assets/GameResources/UI/HPBar.png" Crc="3266269686" ABName="ui" AssetName="HPBar.png" />
+  <ABList Path="Assets/GameResources/UI/HPMask.png" Crc="162678850" ABName="ui" AssetName="HPMask.png" />
+  <ABList Path="Assets/GameResources/UI/JoyStick.png" Crc="3738790172" ABName="ui" AssetName="JoyStick.png" />
+  <ABList Path="Assets/GameResources/UI/RecoverHP.png" Crc="1001736830" ABName="ui" AssetName="RecoverHP.png" />
+  <ABList Path="Assets/GameResources/UI/Skill.png" Crc="2872807709" ABName="ui" AssetName="Skill.png" />
+  <ABList Path="Assets/GameResources/UI/TalkBG.png" Crc="3339023751" ABName="ui" AssetName="TalkBG.png" />
+</AssetBundleConfig>

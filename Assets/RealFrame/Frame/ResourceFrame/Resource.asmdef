@@ -1,0 +1,16 @@
+{
+    "name": "Resource",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4914e92597eb119438c5c31d8e6ca4c7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

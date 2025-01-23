@@ -1,0 +1,41 @@
+ManifestFileVersion: 0
+CRC: 2188000749
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1260f89d1d2faf001ef3a6f1fa5b5bd4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b2cd636646762a7ae57ab7a268c4da95
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 1260f89d1d2faf001ef3a6f1fa5b5bd4
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/GameResources/Prefabs/Door.prefab
+Dependencies:
+- F:/unityWorkspace/RealFrame/Assets/../AssetBundle/StandaloneWindows64/ui

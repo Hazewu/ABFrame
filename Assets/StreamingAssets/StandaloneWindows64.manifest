@@ -1,0 +1,37 @@
+ManifestFileVersion: 0
+CRC: 557009166
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: left
+      Dependencies:
+        Dependency_0: ui
+    Info_1:
+      Name: assetbundleconfig
+      Dependencies: {}
+    Info_2:
+      Name: gamestart
+      Dependencies: {}
+    Info_3:
+      Name: menupanel
+      Dependencies: {}
+    Info_4:
+      Name: sound
+      Dependencies: {}
+    Info_5:
+      Name: loadingpanel
+      Dependencies: {}
+    Info_6:
+      Name: door
+      Dependencies:
+        Dependency_0: ui
+    Info_7:
+      Name: ui
+      Dependencies: {}
+    Info_8:
+      Name: right
+      Dependencies:
+        Dependency_0: ui
+    Info_9:
+      Name: bytes
+      Dependencies: {}

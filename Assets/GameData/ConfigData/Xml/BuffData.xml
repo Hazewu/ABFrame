@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BuffData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AllBuffList Id="1" Name="BUFF0" OutLook="Assets/GameData/...0" Time="4.08298" BuffType="Node">
+    <AllString>ceshi0</AllString>
+    <AllString>run0</AllString>
+  </AllBuffList>
+  <AllBuffList Id="2" Name="BUFF1" OutLook="Assets/GameData/...1" Time="5.056414" BuffType="Node">
+    <AllString>ceshi1</AllString>
+    <AllString>run1</AllString>
+  </AllBuffList>
+  <AllBuffList Id="3" Name="BUFF2" OutLook="Assets/GameData/...2" Time="4.466297" BuffType="Node">
+    <AllString>ceshi2</AllString>
+    <AllString>run2</AllString>
+  </AllBuffList>
+  <AllBuffList Id="4" Name="BUFF3" OutLook="Assets/GameData/...3" Time="9.573868" BuffType="Poison">
+    <AllString>ceshi3</AllString>
+    <AllString>run3</AllString>
+  </AllBuffList>
+  <AllBuffList Id="5" Name="BUFF4" OutLook="Assets/GameData/...4" Time="9.258447" BuffType="Node">
+    <AllString>ceshi4</AllString>
+    <AllString>run4</AllString>
+  </AllBuffList>
+  <AllBuffList Id="6" Name="BUFF5" OutLook="Assets/GameData/...5" Time="7.585202" BuffType="Fire">
+    <AllString>ceshi5</AllString>
+    <AllString>run5</AllString>
+  </AllBuffList>
+  <AllBuffList Id="7" Name="BUFF6" OutLook="Assets/GameData/...6" Time="6.764516" BuffType="Node">
+    <AllString>ceshi6</AllString>
+    <AllString>run6</AllString>
+    <AllBuffList Id="0" Name="name0" />
+    <AllBuffList Id="1" Name="name1" />
+    <AllBuffList Id="2" Name="name2" />
+  </AllBuffList>
+  <AllBuffList Id="8" Name="BUFF7" OutLook="Assets/GameData/...7" Time="5.879604" BuffType="Ice">
+    <AllString>ceshi7</AllString>
+    <AllString>run7</AllString>
+    <AllBuffList Id="4" Name="name0" />
+    <AllBuffList Id="5" Name="name1" />
+    <AllBuffList Id="6" Name="name2" />
+  </AllBuffList>
+  <AllBuffList Id="9" Name="BUFF8" OutLook="Assets/GameData/...8" Time="5.344466" BuffType="Fire">
+    <AllString>ceshi8</AllString>
+    <AllString>run8</AllString>
+  </AllBuffList>
+  <AllBuffList Id="10" Name="BUFF9" OutLook="Assets/GameData/...9" Time="7.332373" BuffType="Ice">
+    <AllString>ceshi9</AllString>
+    <AllString>run9</AllString>
+    <AllBuffList Id="3" Name="name0" />
+  </AllBuffList>
+  <MonsterBuffList Id="1" Name="怪物BUFF0" OutLook="Assets/GameData/Monster/...0" Time="4.212922" BuffType="Fire">
+    <AllString>libai0</AllString>
+    <AllString>dufu0</AllString>
+    <AllString>taoyuanming0</AllString>
+    <AllBuffList Id="1" Name="buff0" />
+    <AllBuffList Id="5" Name="buff1" />
+  </MonsterBuffList>
+  <MonsterBuffList Id="2" Name="怪物BUFF1" OutLook="Assets/GameData/Monster/...1" Time="4.038912" BuffType="Poison">
+    <AllString>libai1</AllString>
+    <AllString>dufu1</AllString>
+    <AllString>taoyuanming1</AllString>
+    <AllBuffList Id="1" Name="buff0" />
+    <AllBuffList Id="5" Name="buff1" />
+    <AllBuffList Id="2" Name="buff2" />
+  </MonsterBuffList>
+  <MonsterBuffList Id="3" Name="怪物BUFF2" OutLook="Assets/GameData/Monster/...2" Time="5.416857" BuffType="Ice">
+    <AllString>libai2</AllString>
+    <AllString>dufu2</AllString>
+    <AllString>taoyuanming2</AllString>
+    <AllBuffList Id="3" Name="buff0" />
+  </MonsterBuffList>
+  <MonsterBuffList Id="4" Name="怪物BUFF3" OutLook="Assets/GameData/Monster/...3" Time="4.941287" BuffType="Fire">
+    <AllString>libai3</AllString>
+    <AllString>dufu3</AllString>
+    <AllString>taoyuanming3</AllString>
+  </MonsterBuffList>
+  <MonsterBuffList Id="5" Name="怪物BUFF4" OutLook="Assets/GameData/Monster/...4" Time="9.309545" BuffType="Node">
+    <AllString>libai4</AllString>
+    <AllString>dufu4</AllString>
+    <AllString>taoyuanming4</AllString>
+    <AllBuffList Id="2" Name="buff0" />
+    <AllBuffList Id="4" Name="buff1" />
+    <AllBuffList Id="6" Name="buff2" />
+  </MonsterBuffList>
+</BuffData>
