@@ -25,13 +25,23 @@ public class MenuUI : HaWindow
 
     private void LoadMonsterData()
     {
-        MonsterData monsterData = ConfigManager.Instance.FindData<MonsterData>(CFG.TABLE_MONSTER);
-        foreach (MonsterBase data in monsterData.AllMonster)
+        Poetry poetryData = ConfigManager.Instance.FindData<Poetry>(CFG.TABLE_POETRY);
+        foreach (PoetryBase data in poetryData.PoetryList)
         {
 
-            Debug.Log(string.Format("ID:{0} 名字: {1} 外观: {2} 高度: {3} 稀有度: {4}", data.Id,
-                data.Name, data.OutLook, data.Height, data.Rare));
+            string contentStr = "";
+            for (int i = 0; i < data.Content.Count; i++)
+            {
+                contentStr += data.Content[i];
+                if (i != data.Content.Count - 1)
+                {
+                    contentStr += ",";
+                }
+            }
+            Debug.Log(string.Format("ID:{0} 名字: {1} 诗人: {2} 内容: {3} 类型: {4}", data.Id,
+                data.Name, data.PoetName, contentStr, data.PoetType));
         }
+
     }
 
     private void OnLoadSpriteTest1(string path, Object obj, object param1 = null, object param2 = null, object param3 = null)

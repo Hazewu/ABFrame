@@ -77,4 +77,5 @@ public class CFG
 {
     public const string TABLE_MONSTER = "Assets/GameData/ConfigData/Binary/MonsterData.bytes";
     public const string TABLE_BUFF = "Assets/GameData/ConfigData/Binary/BuffData.bytes";
+    public const string TABLE_POETRY = "Assets/GameData/ConfigData/Binary/Poetry.bytes";
 }

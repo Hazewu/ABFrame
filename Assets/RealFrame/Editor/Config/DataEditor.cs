@@ -8,6 +8,14 @@ using System.Xml;
 using OfficeOpenXml;
 using System.Reflection;
 using System.ComponentModel;
+using Codice.CM.SEIDInfo;
+
+/// <summary>
+/// 把value转换为特定类型的值的方法
+/// </summary>
+/// <param name="value"></param>
+/// <returns></returns>
+public delegate object OnConvertValue(string value);
 
 public class DataEditor
 {
@@ -16,6 +24,12 @@ public class DataEditor
     private static string Script_Path = RealConfig.GetConfig().m_ScriptsPath;
     private static string Excel_Path = Application.dataPath + "/../Data/Excel/";
     private static string Reg_Path = Application.dataPath + "/../Data/Reg/";
+
+    // key=类型字符串，value=方法
+    private static Dictionary<string, OnConvertValue> m_ConvertDic = new Dictionary<string, OnConvertValue>();
+    // key=类型字符串，value=type
+    private static Dictionary<string, Type> m_BaseTypeDic = new Dictionary<string, Type>();
+    private static bool m_InitConvertDic = false;
 
 
     [MenuItem("Assets/类转xml")]
@@ -274,6 +288,7 @@ public class DataEditor
     [MenuItem("Tools/测试/Excel转xml")]
     public static void ExcelToXmlNew()
     {
+        InitConvertDic();
         string excelName = "Poetry_古诗";
         string excelPath = Excel_Path + "Poetry_古诗.xlsx";
         string className = "Poetry";
@@ -291,12 +306,11 @@ public class DataEditor
         object objClass = CreateClass(className);
         string dataBaseName = className + "Base";
         string dataListName = className + "List";
-        ReadDataToClass(objClass, sheetData);
+        ReadDataToClass(objClass, dataBaseName, dataListName, sheetData);
 
-
-        //// 第五步，序列化
-        //BinarySerializeOpt.XmlSerialize(Xml_Path + xmlName, objClass);
-        //Debug.Log(excelName + "表导入完成！");
+        // 第五步，序列化
+        BinarySerializeOpt.XmlSerialize(Xml_Path + xmlName, objClass);
+        Debug.Log(excelName + "表导入完成！");
     }
 
     /// <summary>
@@ -396,9 +410,39 @@ public class DataEditor
         }
     }
 
-    private static void ReadDataToClass(object objClass, HaSheetData sheetData)
+    private static void ReadDataToClass(object objClass, string className, string objListName, HaSheetData sheetData)
     {
+        // 只是为了得到变量类型
+        object item = CreateClass(className);
+        object list = CreateList(item.GetType());
 
+        // 把每一行数据读到objClass的list中
+        for (int i = 0; i < sheetData.AllData.Count; i++)
+        {
+            object addItem = CreateClass(className);
+            // 读取每一列
+            for (int j = 0; j < sheetData.AllCols.Count; j++)
+            {
+                HaColProperty property = sheetData.AllCols[j];
+                // 数组
+                if (property.IsArray)
+                {
+                    string value = sheetData.AllData[i].DataDic[property.Name];
+                    SetSplitBaseList(addItem, property, value);
+                }
+                else
+                {
+                    string value = sheetData.AllData[i].DataDic[property.Name];
+                    SetPropertyValue(addItem, property.Name, property.Type, value);
+                }
+            }
+            // 加入到list中
+            list.GetType().InvokeMember("Add", BindingFlags.Default | BindingFlags.InvokeMethod,
+                null, list, new object[] { addItem });
+        }
+
+        // 把赋值好的list，放入objClass中
+        objClass.GetType().GetProperty(objListName).SetValue(objClass, list);
     }
 
     private static void ExcelToXml(string name)
@@ -569,6 +613,32 @@ public class DataEditor
                 null, list, new object[] { addItem });
         }
         objClass.GetType().GetProperty(sheetClass.ParentVar.Name).SetValue(objClass, list);
+    }
+
+    private static void SetSplitBaseList(object objClass, HaColProperty property, string value)
+    {
+        Type type = GetBaseType(property.Type);
+        if (type == null)
+        {
+            Debug.LogError(property.Name + "字段的" + property.Type + " 类型无法转换");
+            return;
+        }
+        object list = CreateList(type);
+        string[] rowArray = value.Split(new string[] { "|" }, StringSplitOptions.None);
+        for (int i = 0; i < rowArray.Length; i++)
+        {
+            object addItem = GetConvertValue(property.Type, rowArray[i]);
+            try
+            {
+                list.GetType().InvokeMember("Add", BindingFlags.Default | BindingFlags.InvokeMethod,
+                    null, list, new object[] { addItem });
+            }
+            catch
+            {
+                Debug.LogError(property.Name + " 列表添加失败！具体数值是：" + addItem);
+            }
+        }
+        objClass.GetType().GetProperty(property.Name).SetValue(objClass, list);
     }
 
     private static void SetSplitBaseList(object objClass, VarClass varClass, string value)
@@ -1218,6 +1288,114 @@ public class DataEditor
                 break;
         }
         info.SetValue(obj, val);
+    }
+
+    private static Type GetBaseType(string typeName)
+    {
+        if (string.IsNullOrEmpty(typeName)) return null;
+        Type type = null;
+        if (m_BaseTypeDic.TryGetValue(typeName, out type)) return type;
+        return type;
+    }
+
+    private static object GetConvertValue(string typeName, string value)
+    {
+        OnConvertValue func = null;
+        if (m_ConvertDic.TryGetValue(typeName, out func))
+        {
+            return func(value);
+        }
+        return null;
+    }
+
+    private static void InitConvertDic()
+    {
+        if (m_InitConvertDic) return;
+        m_InitConvertDic = true;
+        m_ConvertDic.Clear();
+        m_ConvertDic.Add("int", GetIntConvert);
+        m_ConvertDic.Add("string", GetStringConvert);
+        m_ConvertDic.Add("bool", GetBoolConvert);
+        m_ConvertDic.Add("float", GetFloatConvert);
+        //m_ConvertDic.Add("enum", GetEnumConvert);
+
+        m_BaseTypeDic.Clear();
+        m_BaseTypeDic.Add("int", typeof(int));
+        m_BaseTypeDic.Add("string", typeof(string));
+        m_BaseTypeDic.Add("bool", typeof(bool));
+        m_BaseTypeDic.Add("float", typeof(float));
+        //m_BaseTypeDic.Add("enum",)
+    }
+
+    /// <summary>
+    /// 转换成int类型
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private static object GetIntConvert(string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            return System.Convert.ToInt32(value);
+        }
+        return 0;
+    }
+
+    /// <summary>
+    /// 转换成string类型
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private static object GetStringConvert(string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            return value;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 转换成bool类型
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private static object GetBoolConvert(string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            return System.Convert.ToBoolean(value);
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///  转换成bool类型
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private static object GetFloatConvert(string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            return System.Convert.ToSingle(value);
+        }
+        return 0;
+    }
+
+    /// <summary>
+    /// 转换成enum对应的类型
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    private static object GetEnumConvert(string value, object obj)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            return TypeDescriptor.GetConverter(obj).ConvertFromInvariantString(value);
+        }
+        return null;
     }
 }
 

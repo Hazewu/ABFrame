@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Poetry xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <PoetryList Id="1" Name="赠汪伦" PoetName="李白" Show="false" PoetType="Four_Five">
+    <ImageIds>1</ImageIds>
+    <ImageIds>2</ImageIds>
+    <ImageIds>3</ImageIds>
+    <Content>李白乘舟将欲行</Content>
+    <Content>忽闻岸上踏歌声</Content>
+    <Content>桃花潭水深千尺</Content>
+    <Content>不及汪伦送我情</Content>
+    <Specials>false</Specials>
+    <Specials>true</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="2" Name="小池" PoetName="杨万里" Show="false" PoetType="Four_Five">
+    <ImageIds>4</ImageIds>
+    <ImageIds>5</ImageIds>
+    <ImageIds>6</ImageIds>
+    <Content>泉眼无声惜细流</Content>
+    <Content>树阴照水爱晴柔</Content>
+    <Content>小荷才露尖尖角</Content>
+    <Content>早有蜻蜓立上头</Content>
+    <Specials>false</Specials>
+    <Specials>true</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="3" Name="咏柳" PoetName="贺知章" Show="false" PoetType="Four_Five">
+    <ImageIds>7</ImageIds>
+    <ImageIds>8</ImageIds>
+    <ImageIds>9</ImageIds>
+    <Content>碧玉妆成一树高</Content>
+    <Content>万条垂下绿丝绦</Content>
+    <Content>不知细叶谁裁出</Content>
+    <Content>二月春风似剪刀</Content>
+    <Specials>false</Specials>
+    <Specials>true</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="4" Name="静夜诗" PoetName="李白" Show="false" PoetType="Four_Seven">
+    <ImageIds>1</ImageIds>
+    <Content>床前明月光</Content>
+    <Content>疑似地上霜</Content>
+    <Content>举头望明月</Content>
+    <Content>低头思故乡</Content>
+    <Specials>false</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="5" Name="黄鹤楼送孟浩然之广陵" PoetName="李白" Show="false" PoetType="Four_Five">
+    <ImageIds>2</ImageIds>
+    <ImageIds>4</ImageIds>
+    <Content>故人西辞黄鹤楼</Content>
+    <Content>烟花三月下扬州</Content>
+    <Content>孤帆远影碧空尽</Content>
+    <Content>未见长江天际流</Content>
+    <Specials>false</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="6" Name="饮湖上初晴后雨二首·其二" PoetName="苏轼" Show="false" PoetType="Four_Five">
+    <ImageIds>0</ImageIds>
+    <Content>水光潋滟晴方好</Content>
+    <Content>山色空蒙雨亦奇</Content>
+    <Content>欲把西湖比西子</Content>
+    <Content>淡妆浓抹总相宜</Content>
+    <Specials>false</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="7" Name="泊船瓜洲" PoetName="王安石" Show="false" PoetType="Four_Five">
+    <ImageIds>0</ImageIds>
+    <Content>京口瓜洲一水间</Content>
+    <Content>钟山只隔数重山</Content>
+    <Content>春风又绿江南岸</Content>
+    <Content>明月何时照我还</Content>
+    <Specials>false</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="8" Name="早发白帝城" PoetName="李白" Show="false" PoetType="Four_Five">
+    <ImageIds>0</ImageIds>
+    <Content>照辞白帝彩云间</Content>
+    <Content>千里江陵一日还</Content>
+    <Content>两岸猿声啼不住</Content>
+    <Content>轻舟已过万重山</Content>
+    <Specials>true</Specials>
+    <Specials>false</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="9" Name="望天门山" PoetName="李白" Show="false" PoetType="Four_Five">
+    <ImageIds>0</ImageIds>
+    <Content>天门中断楚江开</Content>
+    <Content>碧水东流至此回</Content>
+    <Content>两岸青山相对出</Content>
+    <Content>孤帆一片日边来</Content>
+    <Specials>true</Specials>
+    <Specials>false</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+  <PoetryList Id="10" Name="春晓" PoetName="孟浩然" Show="false" PoetType="Four_Seven">
+    <ImageIds>6</ImageIds>
+    <ImageIds>7</ImageIds>
+    <Content>春眠不觉晓</Content>
+    <Content>处处闻啼鸟</Content>
+    <Content>夜来风雨声</Content>
+    <Content>花落知多少</Content>
+    <Specials>true</Specials>
+    <Specials>false</Specials>
+    <Effects>Fire</Effects>
+  </PoetryList>
+</Poetry>

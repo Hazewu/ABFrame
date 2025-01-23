@@ -27,24 +27,25 @@ public class GameStart : MonoSingleton<GameStart>
         );
         RegisterUI();
 
-        //GameMapManager.Instance.Init(this);
+        GameMapManager.Instance.Init(this);
 
         //ObjectManager.Instance.PreloadGameObject(ConstStr_Obj.PREFAB_DOOR, 5);
         //ResourceManager.Instance.PreloadRes(ConstStr_Sound.BGM_MENU);
 
-        //GameMapManager.Instance.LoadScene(ConstStr_UI.SCENE_MENU);
+        GameMapManager.Instance.LoadScene(ConstStr_UI.SCENE_MENU);
     }
 
     private void LoadConfig()
     {
-        //ConfigManager.Instance.LoadData<MonsterData>(CFG.TABLE_MONSTER);
-        //ConfigManager.Instance.LoadData<BuffData>(CFG.TABLE_BUFF);
+        ConfigManager.Instance.LoadData<MonsterData>(CFG.TABLE_MONSTER);
+        ConfigManager.Instance.LoadData<BuffData>(CFG.TABLE_BUFF);
+        ConfigManager.Instance.LoadData<Poetry>(CFG.TABLE_POETRY);
     }
 
     private void RegisterUI()
     {
-        //UIManager.Instance.Register<MenuUI>(ConstStr_UI.PREFAB_PANEL_MENU);
-        //UIManager.Instance.Register<LoadingUI>(ConstStr_UI.PREFAB_PANEL_LOADING);
+        UIManager.Instance.Register<MenuUI>(ConstStr_UI.PREFAB_PANEL_MENU);
+        UIManager.Instance.Register<LoadingUI>(ConstStr_UI.PREFAB_PANEL_LOADING);
     }
 
     private void Update()
