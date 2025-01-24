@@ -7,11 +7,11 @@ using UnityEngine.AI;
 [System.Serializable]
 public class MonsterData : ExcelBase
 {
-    [XmlElement("AllMonster")]
-    public List<MonsterBase> AllMonster { get; set; }
+    [XmlElement("MonsterDataList")]
+    public List<MonsterDataBase> MonsterDataList { get; set; }
 
     [XmlIgnore]
-    public Dictionary<int, MonsterBase> m_AllMonsterDic = new Dictionary<int, MonsterBase>();
+    public Dictionary<int, MonsterDataBase> m_AllMonsterDic = new Dictionary<int, MonsterDataBase>();
 
 #if UNITY_EDITOR
     /// <summary>
@@ -20,16 +20,16 @@ public class MonsterData : ExcelBase
     public override void Construction()
     {
         // 测试数据，后续这里应该读表
-        AllMonster = new List<MonsterBase>();
+        MonsterDataList = new List<MonsterDataBase>();
         for (int i = 0; i < 5; i++)
         {
-            MonsterBase monster = new MonsterBase();
+            MonsterDataBase monster = new MonsterDataBase();
             monster.Id = i + 1;
             monster.Name = i + "sq";
             monster.OutLook = "Assets/GameResource/Prefabs/Door.prefab";
             monster.Rare = 2;
             monster.Height = i + 2;
-            AllMonster.Add(monster);
+            MonsterDataList.Add(monster);
         }
     }
 #endif
@@ -37,7 +37,7 @@ public class MonsterData : ExcelBase
     public override void Init()
     {
         m_AllMonsterDic.Clear();
-        foreach (MonsterBase monster in AllMonster)
+        foreach (MonsterDataBase monster in MonsterDataList)
         {
             if (m_AllMonsterDic.ContainsKey(monster.Id))
             {
@@ -55,14 +55,14 @@ public class MonsterData : ExcelBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public MonsterBase FindMonsterById(int id)
+    public MonsterDataBase FindMonsterById(int id)
     {
         return m_AllMonsterDic[id];
     }
 }
 
 [System.Serializable]
-public class MonsterBase
+public class MonsterDataBase
 {
     // Id
     [XmlAttribute("Id")]

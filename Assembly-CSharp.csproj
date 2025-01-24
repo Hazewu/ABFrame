@@ -76,7 +76,9 @@
   <ItemGroup>
     <None Include="Assets\GameData\ConfigData\Xml\Poetry.xml" />
     <None Include="Assets\AssetBundleConfig.xml" />
+    <None Include="Assets\GameData\ConfigData\Xml\BuffData.xml" />
     <None Include="Assets\RealFrame\readme.txt" />
+    <None Include="Assets\GameData\ConfigData\Xml\MonsterData.xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

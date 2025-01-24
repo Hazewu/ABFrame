@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BuffData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <BuffDataList Id="1" Name="BUFF0" OutLook="Assets/GameData/...0" Time="4.08298" BuffType="Node">
+    <AllString>ceshi0</AllString>
+    <AllString>run0</AllString>
+  </BuffDataList>
+  <BuffDataList Id="2" Name="BUFF1" OutLook="Assets/GameData/...1" Time="5.056414" BuffType="Node">
+    <AllString>ceshi1</AllString>
+    <AllString>run1</AllString>
+  </BuffDataList>
+  <BuffDataList Id="3" Name="BUFF2" OutLook="Assets/GameData/...2" Time="4.466297" BuffType="Node">
+    <AllString>ceshi2</AllString>
+    <AllString>run2</AllString>
+  </BuffDataList>
+  <BuffDataList Id="4" Name="BUFF3" OutLook="Assets/GameData/...3" Time="9.573868" BuffType="Poison">
+    <AllString>ceshi3</AllString>
+    <AllString>run3</AllString>
+  </BuffDataList>
+  <BuffDataList Id="5" Name="BUFF4" OutLook="Assets/GameData/...4" Time="9.258447" BuffType="Node">
+    <AllString>ceshi4</AllString>
+    <AllString>run4</AllString>
+  </BuffDataList>
+  <BuffDataList Id="6" Name="BUFF5" OutLook="Assets/GameData/...5" Time="7.585202" BuffType="Fire">
+    <AllString>ceshi5</AllString>
+    <AllString>run5</AllString>
+  </BuffDataList>
+  <BuffDataList Id="7" Name="BUFF6" OutLook="Assets/GameData/...6" Time="6.764516" BuffType="Node">
+    <AllString>ceshi6</AllString>
+    <AllString>run6</AllString>
+  </BuffDataList>
+  <BuffDataList Id="8" Name="BUFF7" OutLook="Assets/GameData/...7" Time="5.879604" BuffType="Ice">
+    <AllString>ceshi7</AllString>
+    <AllString>run7</AllString>
+  </BuffDataList>
+  <BuffDataList Id="9" Name="BUFF8" OutLook="Assets/GameData/...8" Time="5.344466" BuffType="Fire">
+    <AllString>ceshi8</AllString>
+    <AllString>run8</AllString>
+  </BuffDataList>
+  <BuffDataList Id="10" Name="BUFF9" OutLook="Assets/GameData/...9" Time="7.332373" BuffType="Ice">
+    <AllString>ceshi9</AllString>
+    <AllString>run9</AllString>
+  </BuffDataList>
+</BuffData>

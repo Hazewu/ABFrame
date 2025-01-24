@@ -38,10 +38,23 @@ public class MenuUI : HaWindow
                     contentStr += ",";
                 }
             }
-            Debug.Log(string.Format("ID:{0} 名字: {1} 诗人: {2} 内容: {3} 类型: {4}", data.Id,
+            Debug.Log(string.Format("Poetry ID:{0} 名字: {1} 诗人: {2} 内容: {3} 类型: {4}", data.Id,
                 data.Name, data.PoetName, contentStr, data.PoetType));
         }
 
+        MonsterData monsterData = ConfigManager.Instance.FindData<MonsterData>(CFG.TABLE_MONSTER);
+        foreach (MonsterDataBase data in monsterData.MonsterDataList)
+        {
+            Debug.Log(string.Format("Monster ID:{0} 名字: {1} 稀有度: {2} 高度: {3} 等级: {4}", data.Id,
+                data.Name, data.Rare, data.Height, data.Level));
+        }
+
+        BuffData buffData = ConfigManager.Instance.FindData<BuffData>(CFG.TABLE_BUFF);
+        foreach (BuffDataBase data in buffData.BuffDataList)
+        {
+            Debug.Log(string.Format("Buff ID:{0} 名字: {1} buff类型: {2} 时长: {3}", data.Id,
+                data.Name, data.BuffType, data.Time));
+        }
     }
 
     private void OnLoadSpriteTest1(string path, Object obj, object param1 = null, object param2 = null, object param3 = null)

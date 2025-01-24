@@ -151,13 +151,43 @@ public class DataEditor
     }
 
     [MenuItem("Tools/导表/Excel转Xml")]
-    public static void ExcelToXmlNew()
+    public static void AllExcelToXml()
+    {
+        string path = Excel_Path;
+        string[] filesPath = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+        int length = filesPath.Length;
+        for (int i = 0; i < length; i++)
+        {
+            string tempPath = filesPath[i];
+            EditorUtility.DisplayProgressBar("查找文件夹下面的Excel", "正在扫描" + tempPath + "......", 1.0f / length * i);
+            if (tempPath.EndsWith(".xlsx"))
+            {
+                string name = tempPath.Substring(tempPath.LastIndexOf("/") + 1);
+                name = name.Replace(".xlsx", "");
+                Debug.Log("name:" + name);
+                ExcelToXml(name);
+            }
+        }
+        AssetDatabase.Refresh();
+        EditorUtility.ClearProgressBar();
+    }
+
+    /// <summary>
+    /// excel转xml
+    /// </summary>
+    /// <param name="name">表名不带后缀</param>
+    private static void ExcelToXml(string name)
     {
         InitConvertDic();
-        string excelName = "Poetry_古诗";
-        string excelPath = Excel_Path + "Poetry_古诗.xlsx";
-        string className = "Poetry";
-        string xmlName = "Poetry.xml";
+        string excelName = name;
+        string excelPath = Excel_Path + name + ".xlsx";
+        string className = name;
+        int splitIndex = className.IndexOf("_");
+        if (splitIndex != -1)
+        {
+            className = className.Substring(0, splitIndex);
+        }
+        string xmlName = className + ".xml";
         // 第一步，打开excel
         // 第二步，读取1234行数据，获取字段属性
         // 第三步，读取数据
