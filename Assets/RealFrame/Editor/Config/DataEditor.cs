@@ -19,8 +19,7 @@ public class DataEditor
 {
     private static string Xml_Path = RealConfig.GetConfig().m_XmlPath;
     private static string Binary_Path = RealConfig.GetConfig().m_BinaryPath;
-    private static string Script_Path = RealConfig.GetConfig().m_ScriptsPath;
-    private static string Excel_Path = Application.dataPath + "/../Data/Excel/";
+    private static string Excel_Path = Application.dataPath + RealConfig.GetConfig().m_ExcelPath;
 
     // key=类型字符串，value=方法
     private static Dictionary<string, OnConvertValue> m_ConvertDic = new Dictionary<string, OnConvertValue>();

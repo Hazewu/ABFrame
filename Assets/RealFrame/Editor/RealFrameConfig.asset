@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: RealFrameConfig
   m_EditorClassIdentifier: 
   m_ABBytePath: Assets/GameData/ABData/AssetBundleConfig.bytes
-  m_AppName: RealFrame
   m_XmlPath: Assets/GameData/ConfigData/Xml/
   m_BinaryPath: Assets/GameData/ConfigData/Binary/
-  m_ScriptsPath: Assets/Scripts/Data/
+  m_ExcelPath: /../Data/Excel/

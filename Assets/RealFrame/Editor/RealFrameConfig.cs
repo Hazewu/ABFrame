@@ -12,8 +12,8 @@ public class RealFrameConfig : ScriptableObject
     public string m_XmlPath;
     // 二进制文件夹路径
     public string m_BinaryPath;
-    // 脚本文件夹路径
-    public string m_ScriptsPath;
+    // 配置表路径
+    public string m_ExcelPath;
 }
 
 public class RealConfig
@@ -38,14 +38,14 @@ public class RealFrameConfigInspector : Editor
     public SerializedProperty m_ABBytePath;
     public SerializedProperty m_XmlPath;
     public SerializedProperty m_BinaryPath;
-    public SerializedProperty m_ScriptsPath;
+    public SerializedProperty m_ExcelPath;
 
     private void OnEnable()
     {
         m_ABBytePath = serializedObject.FindProperty("m_ABBytePath");
         m_XmlPath = serializedObject.FindProperty("m_XmlPath");
         m_BinaryPath = serializedObject.FindProperty("m_BinaryPath");
-        m_ScriptsPath = serializedObject.FindProperty("m_ScriptsPath");
+        m_ExcelPath = serializedObject.FindProperty("m_ExcelPath");
     }
 
     public override void OnInspectorGUI()
@@ -57,7 +57,7 @@ public class RealFrameConfigInspector : Editor
         GUILayout.Space(5);
         EditorGUILayout.PropertyField(m_BinaryPath, new GUIContent("配置表二进制路径"));
         GUILayout.Space(5);
-        EditorGUILayout.PropertyField(m_ScriptsPath, new GUIContent("配置表脚本路径"));
+        EditorGUILayout.PropertyField(m_ExcelPath, new GUIContent("配置表路径(不需要在Assets内)"));
         GUILayout.Space(5);
         serializedObject.ApplyModifiedProperties();
     }
