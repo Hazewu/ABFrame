@@ -1013,10 +1013,6 @@
       <Project>{8BF3E0D3-50CD-2298-1173-4F293A92755B}</Project>
       <Name>Resource</Name>
     </ProjectReference>
-    <ProjectReference Include="Test.csproj">
-      <Project>{75B22DFE-AF8F-30BD-5569-7B27D47C2B87}</Project>
-      <Name>Test</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
