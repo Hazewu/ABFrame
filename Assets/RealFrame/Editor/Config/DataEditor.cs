@@ -7,6 +7,9 @@ using System.Xml;
 using OfficeOpenXml;
 using System.Reflection;
 using System.ComponentModel;
+using Codice.CM.Common;
+using UnityEngine.Experimental.Playables;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 /// <summary>
 /// 把value转换为特定类型的值的方法
@@ -14,6 +17,13 @@ using System.ComponentModel;
 /// <param name="value"></param>
 /// <returns></returns>
 public delegate object OnConvertValue(string value);
+
+public class ColType
+{
+    public string Type { get; set; }
+    public bool IsArray { get; set; }
+}
+
 
 public class DataEditor
 {
@@ -25,58 +35,151 @@ public class DataEditor
     private static Dictionary<string, OnConvertValue> m_ConvertDic = new Dictionary<string, OnConvertValue>();
     // key=类型字符串，value=type
     private static Dictionary<string, Type> m_BaseTypeDic = new Dictionary<string, Type>();
+    // key=Type，value = ColType
+    private static Dictionary<Type, ColType> m_StrTypeDic = new Dictionary<Type, ColType>();
     private static bool m_InitConvertDic = false;
 
 
-    [MenuItem("Assets/类转xml")]
-    public static void AssetsClassToXml()
+    [MenuItem("Assets/类生成Excel")]
+    public static void AssetsClassToExcel()
     {
+        InitConvertDic();
         UnityEngine.Object[] objs = Selection.objects;
         int length = objs.Length;
         for (int i = 0; i < length; i++)
         {
-            EditorUtility.DisplayProgressBar("文件夹下的类转成xml", "正在扫描" + objs[i].name + "......", 1.0f / length * i);
-            ClassToXml(objs[i].name);
+            //EditorUtility.DisplayProgressBar("文件夹下的类转成Excel", "正在扫描" + objs[i].name + "......", 1.0f / length * i);
+            ClassToExcel(objs[i].name);
         }
         AssetDatabase.Refresh();
-        EditorUtility.ClearProgressBar();
+        //EditorUtility.ClearProgressBar();
     }
 
     /// <summary>
-    /// 提供单个类转xml方法
+    /// 提供单个类生成Excel的方法
     /// </summary>
     /// <param name="name"></param>
-    private static void ClassToXml(string name)
+    private static void ClassToExcel(string name)
     {
-        try
+        string excelName = name;
+        string className = name;
+        string dataBaseName = className + "Base";
+        string dataListName = className + "List";
+
+        // 第一步，实例化类，获得数据
+        object obj = CreateClass(name);
+        (obj as ExcelBase).Construction();
+        //Type objType = obj.GetType();
+        object dataList = GetMemberValue(obj, dataListName);
+        if (dataList == null)
         {
-            // 需要获取当前主程序的所有程序集，根据name找到对应的类进行实例化
-            Type type = null;
-            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            Debug.LogError(name + "类中的" + dataListName + "没有数据，请检查Construction()方法中是否有赋值");
+            return;
+        }
+
+        int listCount = System.Convert.ToInt32(dataList.GetType().InvokeMember("get_Count", BindingFlags.Default
+       | BindingFlags.InvokeMethod, null, dataList, new object[] { }));
+
+        HaSheetData sheetData = new HaSheetData();
+        //sheetData.AllCols
+
+        // 第二步，拿第一个数据，找到dataBase中的属性，获得属性名字、类型
+        object item = dataList.GetType().InvokeMember("get_Item", BindingFlags.Default
+                | BindingFlags.InvokeMethod, null, dataList, new object[] { 0 });
+        Type baseType = item.GetType();
+        MemberInfo[] infos = baseType.GetMembers();
+        foreach (MemberInfo info in infos)
+        {
+            // 找到所有属性的名字，再到数据中去拿类型
+            if (info.MemberType == System.Reflection.MemberTypes.Property)
             {
-                Type tempType = asm.GetType(name);
-                if (tempType != null)
+                PropertyInfo propertyInfo = baseType.GetProperty(info.Name);
+                ColType colType = GetColType(propertyInfo.PropertyType);
+                HaColProperty property = new HaColProperty()
                 {
-                    type = tempType;
-                    break;
+                    Name = info.Name,
+                    Type = colType.Type,
+                    IsArray = colType.IsArray,
+                };
+                sheetData.AllCols.Add(property);
+            }
+        }
+
+        // 第三步，读取所有数据
+        for (int i = 0; i < listCount; i++)
+        {
+            object singleItem = dataList.GetType().InvokeMember("get_Item", BindingFlags.Default
+                | BindingFlags.InvokeMethod, null, dataList, new object[] { i });
+            HaRowData rowData = new HaRowData();
+            for (int j = 0; j < sheetData.AllCols.Count; j++)
+            {
+                string tempName = sheetData.AllCols[j].Name;
+                object tempValue = null;
+                if (sheetData.AllCols[j].IsArray)
+                {
+                    tempValue = GetSplitBaseList(singleItem, tempName);
+                }
+                else
+                {
+                    tempValue = GetMemberValue(singleItem, tempName);
+                }
+                if (tempValue != null)
+                {
+                    rowData.DataDic.Add(tempName, tempValue.ToString());
+                }
+            }
+            sheetData.AllData.Add(rowData);
+        }
+
+        // 第四步，写入excel中，不必再经过一层xml，xml只是为了看数据对不对
+        string excelPath = Excel_Path + name + ".xlsx";
+        FileInfo excelFile = new FileInfo(excelPath);
+        if (excelFile.Exists)
+        {
+            excelFile.Delete();
+        }
+        using (ExcelPackage package = new ExcelPackage(excelFile))
+        {
+            ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(excelName);
+
+            int colCount = sheetData.AllCols.Count;
+            int rowCount = sheetData.AllData.Count;
+            // 前4行数据
+            for (int col = 0; col < colCount; col++)
+            {
+                HaColProperty property = sheetData.AllCols[col];
+                if (property.IsArray)
+                {
+                    workSheet.Cells[1, col + 1].Value = property.Type + "[]";
+                }
+                else
+                {
+                    workSheet.Cells[1, col + 1].Value = property.Type;
+                }
+                workSheet.Cells[2, col + 1].Value = property.Name;
+            }
+
+
+            // 第5行（包括）后的数据
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int col = 0; col < colCount; col++)
+                {
+                    HaColProperty property = sheetData.AllCols[col];
+                    ExcelRange range = workSheet.Cells[row + 5, col + 1];
+                    if (sheetData.AllData[row].DataDic.ContainsKey(property.Name))
+                    {
+                        range.Value = sheetData.AllData[row].DataDic[property.Name];
+                    }
+                    else
+                    {
+                        Debug.LogError("rowData中没有" + property.Name);
+                    }
                 }
             }
 
-            if (type != null)
-            {
-                var temp = Activator.CreateInstance(type);
-                if (temp is ExcelBase)
-                {
-                    (temp as ExcelBase).Construction();
-                }
-                string xmlPath = Xml_Path + name + ".xml";
-                BinarySerializeOpt.XmlSerialize(xmlPath, temp);
-                Debug.Log(name + "类转xml成功，xml路径为:" + xmlPath);
-            }
-        }
-        catch
-        {
-            Debug.LogError(name + "类转xml失败!");
+            package.Save();
+            Debug.Log(name + "类转Excel成功，Excel路径为:" + excelPath);
         }
     }
 
@@ -367,6 +470,31 @@ public class DataEditor
     }
 
     /// <summary>
+    /// 获取基础list里面的所有值
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="varClass"></param>
+    /// <returns></returns>
+    private static string GetSplitBaseList(object data, string name)
+    {
+        string str = "";
+        object dataList = GetMemberValue(data, name);
+        int listCount = System.Convert.ToInt32(dataList.GetType().InvokeMember("get_Count", BindingFlags.Default
+            | BindingFlags.InvokeMethod, null, dataList, new object[] { }));
+        for (int i = 0; i < listCount; i++)
+        {
+            object item = dataList.GetType().InvokeMember("get_Item", BindingFlags.Default
+                | BindingFlags.InvokeMethod, null, dataList, new object[] { i });
+            str += item.ToString();
+            if (i != listCount - 1)
+            {
+                str += "|";
+            }
+        }
+        return str;
+    }
+
+    /// <summary>
     /// 判断文件是否被占用
     /// </summary>
     /// <param name="path"></param>
@@ -533,6 +661,30 @@ public class DataEditor
         return type;
     }
 
+    /// <summary>
+    /// 根据type获得其列类型
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private static ColType GetColType(Type type)
+    {
+        ColType col = null;
+        if (m_StrTypeDic.TryGetValue(type, out col))
+        {
+            return col;
+        }
+        // 暂时处理成枚举类型
+        if (col == null)
+        {
+            col = new ColType()
+            {
+                Type = "enum",
+                IsArray = type.ToString().Contains("System.Collections.Generic.List")
+            };
+        }
+        return col;
+    }
+
     private static object GetConvertValue(string typeName, string value)
     {
         OnConvertValue func = null;
@@ -559,7 +711,19 @@ public class DataEditor
         m_BaseTypeDic.Add("string", typeof(string));
         m_BaseTypeDic.Add("bool", typeof(bool));
         m_BaseTypeDic.Add("float", typeof(float));
-        //m_BaseTypeDic.Add("enum",)
+        //m_BaseTypeDic.Add("enum", typeof(Enum));
+
+        m_StrTypeDic.Clear();
+        m_StrTypeDic.Add(typeof(int), new ColType() { Type = "int", IsArray = false });
+        m_StrTypeDic.Add(typeof(string), new ColType() { Type = "string", IsArray = false });
+        m_StrTypeDic.Add(typeof(bool), new ColType() { Type = "bool", IsArray = false });
+        m_StrTypeDic.Add(typeof(float), new ColType() { Type = "float", IsArray = false });
+        //m_StrTypeDic.Add(typeof(Enum), new ColType() { Type = "enum", IsArray = false });
+
+        m_StrTypeDic.Add(typeof(List<int>), new ColType() { Type = "int", IsArray = true });
+        m_StrTypeDic.Add(typeof(List<string>), new ColType() { Type = "string", IsArray = true });
+        m_StrTypeDic.Add(typeof(List<bool>), new ColType() { Type = "bool", IsArray = true });
+        m_StrTypeDic.Add(typeof(List<float>), new ColType() { Type = "float", IsArray = true });
     }
 
     /// <summary>

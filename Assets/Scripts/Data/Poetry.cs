@@ -16,7 +16,36 @@ public class Poetry : ExcelBase
 #if UNITY_EDITOR
     public override void Construction()
     {
-        //
+        PoetryList = new List<PoetryBase>();
+        for (int i = 0; i < 4; i++)
+        {
+            PoetryBase buff = new PoetryBase();
+            buff.Id = i + 1;
+
+            buff.ImageIds = new List<int>();
+            buff.ImageIds.Add(i);
+            buff.ImageIds.Add(i + 1);
+
+            buff.Name = "赠汪伦" + i;
+            buff.PoetName = "李白" + i;
+
+            buff.Content = new List<string>();
+            buff.Content.Add("李白乘舟将欲行");
+            buff.Content.Add("忽闻岸上踏歌声");
+
+            buff.Show = i % 2 == 0;
+
+            buff.Specials = new List<bool>();
+            buff.Specials.Add(true);
+
+            buff.PoetType = EmPoetType.Four_Five;
+
+            buff.Effects = new List<EmEffectType>();
+            buff.Effects.Add(EmEffectType.Light);
+            buff.Effects.Add(EmEffectType.Water);
+
+            PoetryList.Add(buff);
+        }
     }
 #endif
 
@@ -72,7 +101,7 @@ public class PoetryBase
     public EmPoetType PoetType { get; set; }
     // 特效数组
     [XmlElement("Effects")]
-    public EmEffectType Effects { get; set; }
+    public List<EmEffectType> Effects { get; set; }
 }
 
 public enum EmPoetType
